@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}OVPN clients status{% endblock %}
+{% block content %}
+
+{# Content Wrapper. Contains page content #}
+<div class="content-wrapper">
+
+	{# Content Header (Page header) #}
+	<div class="content-header">
+		<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+			<h1 class="m-0">Tun Clients Status List</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+			<ol class="breadcrumb float-sm-right">
+				<li class="breadcrumb-item"><a href="{{ url_for('ovpn.index') }}">Home</a></li>
+				<li class="breadcrumb-item active">Main</li>
+			</ol>
+			</div>
+		</div>
+		</div>
+	</div>
+	{#  content-header END #}
+
+	<section class="content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+					{# <div class="row">
+						<div class="col-sm-5">
+							<button type="button" class="btn btn-primary" data-toggle="modal"
+								data-target="#addStudentUser">Add user</button>
+						</div>
+					</div> #}
+					{% with messages = get_flashed_messages(with_categories=true) %}
+					{% if messages %}
+						<ul class=flashes>
+						{% for category, message in messages %}
+						<div class="text-{{ category }}">{{ message }}</div>
+						{% endfor %}
+						</ul>
+					{% endif %}
+					{% endwith %}
+					<div id="liveAlertPlaceholder"></div>
+				</div>
+			</div>
+			
+ 			<div class="card">
+              <div class="card-header">
+              </div> {# /.card-header #}
+              <div class="card-body">
+					<table id="tuntbclientstatus" class="table table-bordered table-striped table-hover">
+	                  <thead>
+	                  <tr>
+	                    <th>Store</th>
+	                    <th>CN</th>
+	                    <th>vIP</th>
+	                    <th>ToggleDate</th>
+	                    <th>Expire</th>
+	                    <th>Status</th>
+	                    <th>Connections</th>
+						<th>ProxyConfig</th>
+						
+	                  </tr>
+	                  </thead>
+	     
+	                  <tfoot>
+	                    <th>Store</th>
+	                    <th>CN</th>
+	                    <th>vIP</th>
+	                    <th>ToggleDate</th>
+	                    <th>Expire</th>
+	                    <th>Status</th>
+	                    <th>Connections</th>
+						<th>ProxyConfig</th>
+
+	                  </tfoot>
+	                </table>	              
+	            </div>{# /.card-body #}
+			</div>
+		</div>
+
+		{# change storename modal #}
+		<div class="modal fade" id="tunclientStatusModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    
+		    <div class="modal-content">
+			
+			<form method="post" action="javascript: void(0)" enctype ="multipart/form-data">
+		      
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="tunclientstatusModalLabel">Update store name</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      
+		      <div class="modal-body">
+				<div class="form-group display_store_info">Something wrong, please report!</div>
+		        <div class="form-group">
+		          <input type="text" class="form-control" name="newstorename" placeholder="new store name">
+	            </div>
+	            <div class="form-group error_info"></div>
+			  </div>
+
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-primary">Update</button>
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		      </div>
+		    
+		    </form>  		      
+		    </div>
+		  </div>
+		</div>
+
+	</section>
+</div>
+
+{% endblock %}

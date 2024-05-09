@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %} System config {% endblock %}
+{% block content %}
+
+{# Content Wrapper. Contains page content #}
+<div class="content-wrapper">
+
+	{# Content Header (Page header) #}
+	<div class="content-header">
+		<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+			<h1 class="m-0"> System configuration </h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+			<ol class="breadcrumb float-sm-right">
+				<li class="breadcrumb-item"><a href="{{ url_for('ovpn.index') }}">Home</a></li>
+				<li class="breadcrumb-item active">Main</li>
+			</ol>
+			</div>
+		</div>
+		</div>
+	</div>
+	{#  content-header END #}
+
+
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	{% if messages %}
+		<ul class=flashes>
+		{% for category, message in messages %}
+		<div class="text-{{ category }}">{{ message }}</div>
+		{% endfor %}
+		</ul>
+	{% endif %}
+	{% endwith %}
+	
+
+
+	
+	<section class="content">
+	  <div class="container-fluid">
+
+		<div class="col-md-8">
+			<div class="card card-secondary">
+				
+			{# <div class="alert alert-danger alert-dismissible fade show" role="alert">
+			  <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			    <span aria-hidden="true">&times;</span>
+			  </button>
+			</div> #}		
+				<div id="liveAlertPlaceholder"></div>
+					
+				<div class="card-header">
+				<h3 class="card-title">Config</h3>
+				</div>
+			
+				<div class="card-body">
+		            <table id="tbSystemConfig" class="table table-bordered table-striped table-hover">
+		              <thead>
+		              <tr>
+		                <th>Items</th>
+		                <th>Values</th>
+
+		              </tr>
+		              </thead>
+		 
+		            </table>	
+				</div>
+					
+				<div class="card-footer">
+					<button type="submit" id='updateSystemConfig' class="btn btn-info float-right">Update</button>
+				</div>			
+
+		</div>
+
+	  </div>
+	</section>  
+
+</div>
+{% endblock %}

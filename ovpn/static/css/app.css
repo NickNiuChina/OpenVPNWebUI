@@ -1,0 +1,53 @@
+ /*
+* Placeholder dashboard ideas
+*/
+ 
+ .placeholders {
+     margin-bottom: 30px;
+     text-align: center;
+ }
+ 
+ .placeholders h4 {
+     margin-bottom: 0;
+ }
+ 
+ .placeholder {
+     margin-bottom: 20px;
+ }
+ 
+ .placeholder img {
+     display: inline-block;
+     border-radius: 50%;
+ }
+ 
+ .placeholder img {
+     width: 200px;
+ }
+ 
+ .imgBox {
+     position: relative;
+ }
+ 
+ .imgText {
+     display: block;
+     width: 50px;
+     height: 100px;
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     margin-left: -25px;
+     margin-top: -20px;
+ }
+ 
+ .custom-file-label {
+    text-decoration: none;
+    color: #bfbfbf;
+    font-size: 14px;
+}
+
+/*
+ table text size
+*/
+tr, td {font-size:13px; }
+tr, td, a {font-size:13px; }
+tr, td, a, i {font-size:13px; }

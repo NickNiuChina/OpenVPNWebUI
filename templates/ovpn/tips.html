@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Tips{% endblock %}
+{% block content %}
+{# Content Wrapper. Contains page content #}
+<div class="content-wrapper">
+
+	{# Content Header (Page header) #}
+	<section class="content">
+	<div class="content-header">
+		<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+			<h1 class="m-0">Tips</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+			<ol class="breadcrumb float-sm-right">
+				<li class="breadcrumb-item"><a href="{{ url_for('ovpn.index') }}">Home</a></li>
+				<li class="breadcrumb-item active">Main</li>
+			</ol>
+			</div>
+		</div>
+		</div>
+	</div>
+	</section>
+	{#  content-header END #}
+
+
+	{# introduction content #}
+
+    <div class="content px-2">
+        <p><b>OVPN client status: </b>List Ovpn client status and name the client</p>
+        <p><b>Issue certification: </b> can help upload vpn clients req files </p>
+        <p><b>OVPN REQ files: </b> list all the reqs files</p>
+        <p><b>OVPN CLIENT files: </b> list all the client files </p>
+        <p><b>OVPN CLIENT status: </b> list clients status </p>
+    </div>
+
+</div>
+{% endblock %}

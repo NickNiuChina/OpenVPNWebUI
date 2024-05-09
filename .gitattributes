@@ -1,0 +1,5 @@
+# Set the default behavior for all text files
+* text=auto
+
+# Set the final newline setting for all files on commit
+* eol=lf

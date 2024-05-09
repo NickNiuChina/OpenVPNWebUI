@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Generate boss clients certification{% endblock %}
+{% block content %}
+
+{# Content Wrapper. Contains page content #}
+<div class="content-wrapper">
+
+	{# Content Header (Page header) #}
+	<div class="content-header">
+		<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+			<h1 class="m-0"> Generate boss clients certification </h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+			<ol class="breadcrumb float-sm-right">
+				<li class="breadcrumb-item"><a href="{{ url_for('ovpn.index') }}">Home</a></li>
+				<li class="breadcrumb-item active">Main</li>
+			</ol>
+			</div>
+		</div>
+		</div>
+	</div>
+	{#  content-header END #}
+
+
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	{% if messages %}
+		<ul class=flashes>
+		{% for category, message in messages %}
+		<div class="text-{{ category }}">{{ message }}</div>
+		{% endfor %}
+		</ul>
+	{% endif %}
+	{% endwith %}
+	
+	<section class="content">
+	  <div class="container-fluid">
+		<h4 class="m-0">Upload Req file for tun clients</h4>
+		<div class="col-md-6 "> {# mx-auto #}
+		    <form method="post" action="{{ url_for('ovpn.generateGenericClientCert', mode='Tun') }}" enctype ="multipart/form-data">
+		        <div class="input-group">
+		            <label>请输入需要生成的CN（字母 数字 与 _ - 组合）：</label>
+		            <div class="input-group">
+		                <input type="text" 
+		                        placeholder="请输入cn" 
+		                        class="custom-text-input" 
+		                        name="new_cn" 
+		                        id="new_cn" 
+		                        required
+		                />
+		
+		            </div>
+		
+		            <div class="input-group-append">
+		                <input class="btn btn-primary" type="submit" value="Confirm" />
+		            </div>
+		        </div>
+		     </form>
+		</div>
+	  </div>
+	</section>  
+
+</div>
+{% endblock %}
