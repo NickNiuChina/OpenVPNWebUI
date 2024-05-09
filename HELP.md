@@ -116,3 +116,16 @@ setInterval(updateKnob, 1000); // 每秒更新一次
             fi
     fi
     exit 0
+
+4.  Initial Super User
+```
+from users.models import UserGroup
+User.initial()
+```
+
+5. redirect to next url
+```https://stackoverflow.com/questions/3209906/django-return-redirect-with-parameters
+redirect_url = reverse('my_function', args=(backend,))
+parameters = urlencode(form.cleaned_data)
+return redirect(f'{redirect_url}?{parameters}')
+```
