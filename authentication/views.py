@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django import forms
 from users.models import User
 from django.contrib.auth.hashers import make_password, check_password
@@ -40,7 +40,9 @@ def login(request, next=None):
     username = request.POST.get('username')
     password = request.POST.get('password')
     user = User.objects.filter(username=username).first()
-
+    redirect_url = request.POST.get("next")
+    print("redirect_url: " + redirect_url)
+    print(username, password, user.password)
     if username and password and user:
         if check_password(password, user.password):
             # create session
@@ -48,14 +50,17 @@ def login(request, next=None):
             if request.POST.get('rememberme'):
                 # for seven days
                 request.session.set_expiry(60 * 60 * 24 * 7)
-            return redirect('ovpn:index')
+            if redirect_url == ["/", reverse('authentication:login')]:
+                return redirect('ovpn:index')
+            else:
+                redirect(redirect_url)
         else:
             messages.error(request, "Username or password is not correct!")
             return render(request, 'auth/login.html')
     else:
         pass
     # return render(request, 'auth/login.html', {"form": form})
-    messages.error(request, "Username or password is not correct!")
+    messages.error(request, "Username or password is not correct!!")
     return render(request, 'auth/login.html')
 
 
