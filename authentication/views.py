@@ -53,7 +53,8 @@ def login(request, next=None):
             if redirect_url == ["/", reverse('authentication:login')]:
                 return redirect('ovpn:index')
             else:
-                return redirect(redirect_url)
+            return redirect(redirect_url)
+
         else:
             messages.error(request, "Username or password is not correct!")
             return render(request, 'auth/login.html')
