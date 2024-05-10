@@ -48,9 +48,10 @@ def login(request, next=None):
         # Cookie invalid
         pass
     else:
-        # 用户ID有效，确保用户仍然存在于数据库中
+        # Make sure the new is still in db
         user = User.objects.filter(id=user_id).first()
         if user:
+            request.session["authenticated"] = {"id": str(user.id), "username": user.username, "group": str(user.group)}
             return redirect('ovpn:index')
         else:
             # User does not exist
@@ -90,6 +91,10 @@ def login(request, next=None):
     messages.error(request, "Username or password is not correct!!")
     return render(request, 'auth/login.html')
 
+
+def logout(request):
+    del request.session['authenticated']
+    return redirect("authentication:login")
 
 # 图片验证码
 # from appback.util.Verification_Code import Verification_Code
