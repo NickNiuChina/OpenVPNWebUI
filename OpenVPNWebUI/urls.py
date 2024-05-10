@@ -26,3 +26,6 @@ urlpatterns = [
     path('show/sessions', views.show_sessions, name='sessions'),
     path('ovpn/', include(('ovpn.urls', "ovpn"), namespace="ovpn"))
 ]
+
+handler404 = 'OpenVPNWebUI.views.handler404'
+handler500 = 'OpenVPNWebUI.views.handler500'

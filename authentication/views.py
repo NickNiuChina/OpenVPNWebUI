@@ -4,6 +4,8 @@ from django import forms
 from users.models import User
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib import messages
+from django.utils.encoding import force_bytes, force_str
+from django.core.signing import Signer, SignatureExpired
 
 
 class LoginForm(forms.Form):
@@ -37,23 +39,47 @@ def login(request, next=None):
     # print(data)
     # if form.is_valid():
 
+    # Cookie
+    signed_cookie = Signer()
+    try:
+        user_id = force_str(signed_cookie.unsign(request.COOKIES["auth_cookie"]))
+        print("user_id: " + user_id)
+    except (KeyError, SignatureExpired):
+        # Cookie invalid
+        pass
+    else:
+        # 用户ID有效，确保用户仍然存在于数据库中
+        user = User.objects.filter(id=user_id).first()
+        if user:
+            return redirect('ovpn:index')
+        else:
+            # User does not exist
+            pass
+
     username = request.POST.get('username')
     password = request.POST.get('password')
     user = User.objects.filter(username=username).first()
     redirect_url = request.POST.get("next")
-    print("redirect_url: " + redirect_url)
-    print(username, password, user.password)
+
     if username and password and user:
         if check_password(password, user.password):
             # create session
             request.session["authenticated"] = {"id": str(user.id), "username": username, "group": str(user.group)}
-            if request.POST.get('rememberme'):
+            if request.POST.get('remember') == 'on':
                 # for seven days
+                request.session["authenticated"].update({'remember': 'on'})
                 request.session.set_expiry(60 * 60 * 24 * 7)
-            if redirect_url == ["/", reverse('authentication:login')]:
+            if redirect_url in ["/", reverse('authentication:login')]:
                 return redirect('ovpn:index')
             else:
-                return redirect(redirect_url)
+                # Create cookie
+                signed_cookie = Signer()
+                # cookie_key = 'auth_cookie_%s' % user.id
+                cookie_value = signed_cookie.sign(force_str(user.id))
+                response = redirect(redirect_url)
+                response.set_cookie("auth_cookie", cookie_value, max_age=60*60*24*7)
+
+                return response
 
         else:
             messages.error(request, "Username or password is not correct!")

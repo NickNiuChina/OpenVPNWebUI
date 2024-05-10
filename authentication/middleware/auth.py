@@ -12,7 +12,7 @@ class AuthMiddleware(MiddlewareMixin):
         if str(request.path_info).startswith(reverse('authentication:login').rstrip('/')):
             return redirect(reverse('authentication:login'))
 
-        # 读取当前访问用户的 session 信息
+        # Read session
         info_dict = request.session.get("authenticated")
         if info_dict:
             return None
