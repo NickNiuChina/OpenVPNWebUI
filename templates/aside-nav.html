@@ -21,66 +21,16 @@
             </a>
           </li>
 
-		{# TUN mode menu #}
-		{% if config.TUN_MODE == 'enabled' %}
-	       <li class="nav-item menu-open">
-	        <a href="javascript:void(0);" class="nav-link">
-	          <i class="nav-icon fas fa-server"></i>
-	          <p>
-	            OVPN-tcp-443-tun
-	            <i class="right fas fa-angle-left"></i>
-	          </p>
-	        </a>
-	        <ul class="nav nav-treeview">
-						
-	          <li class="nav-item">
-	            <a href="/" class="nav-link">
-	              <i class="nav-icon far fa-file"></i>
-	              <p>OVPN clients status</p>
-	            </a>
-	          </li>
-	
-	          <li class="nav-item">
-	            <a href="/" class="nav-link">
-	              <i class="nav-icon far fa-file"></i>
-	              <p>Generate boss cert</p>
-	            </a>
-	          </li>
-	
-	          <li class="nav-item">
-	            <a href="/" class="nav-link">
-	              <i class="nav-icon far fa-file"></i>
-	              <p>Generate generic cert</p>
-	            </a>
-	          </li>
-	
-	          <li class="nav-item">
-	            <a href="/" class="nav-link">
-	              <i class="nav-icon far fa-file"></i>
-	              <p>BOSS REQ files</p>
-	            </a>
-	          </li>
-	
-	          <li class="nav-item">
-	            <a href="/" class="nav-link">
-	              <i class="nav-icon far fa-file"></i>
-	              <p>BOSS cert files</p>
-	            </a>
-	          </li>
-	
-	          <li class="nav-item">
-	            <a href="/" class="nav-link">
-	              <i class="nav-icon far fa-file"></i>
-	              <p>Generic client certs</p>
-	            </a>
-	          </li>
-	
-	        </ul>
-	      </li>
-        {% endif %}
+		  <li class="nav-item">
+            <a href="{% url 'ovpn:index' %}" class="nav-link">
+              <i class="nav-icon far fa-file"></i>
+              <p>OpenVPN services</p>
+            </a>
+          </li>
 
-		{# TAP mode menu #}
-		{% if config.TAP_MODE == 'enabled' %}
+
+		{# OpenVPN Server detail #}
+		{% if session_data.authenticated.group == 'SUPER' %}
 	       <li class="nav-item menu-open">
 	        <a href="javascript:void(0);" class="nav-link">
 	          <i class="nav-icon fas fa-server"></i>
@@ -137,7 +87,7 @@
 	      </li>
         {% endif %}
 
-		{% if session_data.user_type == 1 %}
+		{% if session_data.authenticated.group == 'SUPER' or session_data.authenticated.group == 'ADMIN' %}
 	      <li class="nav-item">
 	        <a href="" class="nav-link active">
 	          <i class="nav-icon fas fa-table"></i>
@@ -148,7 +98,7 @@
 
 
 		{# management menu for super only #}
-		{% if session_data.username == 'super' %}
+		{% if session_data.authenticated.group == 'SUPER' %}
 	       <li class="nav-item menu-open">
 	        <a href="javascript:void(0);" class="nav-link">
 	          <i class="nav-icon fas fa-server"></i>
@@ -181,12 +131,19 @@
 	          </li>
 
 	          <li class="nav-item">
-	            <a href="/" target="_blank" class="nav-link">
+	            <a href="{% url 'ovpn:settings' %}" target="_blank" class="nav-link">
 	              <i class="nav-icon far fa-file"></i>
-	              <p>Flask App config</p>
+	              <p>Django settings</p>
 	            </a>
 	          </li>
-	          
+
+			  <li class="nav-item">
+	            <a href="{% url 'ovpn:sessions' %}" target="_blank" class="nav-link">
+	              <i class="nav-icon far fa-file"></i>
+	              <p>Django sessions</p>
+	            </a>
+	          </li>
+
 	        </ul>
 	      </li>
         {% endif %}
