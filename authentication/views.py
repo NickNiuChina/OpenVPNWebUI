@@ -39,24 +39,6 @@ def login(request, next=None):
     # print(data)
     # if form.is_valid():
 
-    # Cookie
-    signed_cookie = Signer()
-    try:
-        user_id = force_str(signed_cookie.unsign(request.COOKIES["auth_cookie"]))
-        print("user_id: " + user_id)
-    except (KeyError, SignatureExpired):
-        # Cookie invalid
-        pass
-    else:
-        # Make sure the new is still in db
-        user = User.objects.filter(id=user_id).first()
-        if user:
-            request.session["authenticated"] = {"id": str(user.id), "username": user.username, "group": str(user.group)}
-            return redirect('ovpn:index')
-        else:
-            # User does not exist
-            pass
-
     username = request.POST.get('username')
     password = request.POST.get('password')
     user = User.objects.filter(username=username).first()
@@ -70,16 +52,10 @@ def login(request, next=None):
                 # for seven days
                 request.session["authenticated"].update({'remember': 'on'})
                 request.session.set_expiry(60 * 60 * 24 * 7)
-            if redirect_url in ["/", reverse('authentication:login')]:
+            if redirect_url in ["/", reverse('authentication:login')] or not str(redirect_url).startswith("/"):
                 return redirect('ovpn:index')
             else:
-                # Create cookie
-                signed_cookie = Signer()
-                # cookie_key = 'auth_cookie_%s' % user.id
-                cookie_value = signed_cookie.sign(force_str(user.id))
                 response = redirect(redirect_url)
-                response.set_cookie("auth_cookie", cookie_value, max_age=60*60*24*7)
-
                 return response
 
         else:

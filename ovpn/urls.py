@@ -21,4 +21,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name="index"),
+    path('show/settings', views.show_settings, name='settings'),
+    path('show/sessions', views.show_sessions, name='sessions'),
 ]

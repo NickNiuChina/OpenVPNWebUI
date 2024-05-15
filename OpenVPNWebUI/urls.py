@@ -22,8 +22,6 @@ urlpatterns = [
     path('', views.redirect_index, name='index'),
     path('admin/', admin.site.urls),
     path('auth/', include(("authentication.urls", 'authentication'), "auth")),
-    path('show/settings', views.show_settings, name='settings'),
-    path('show/sessions', views.show_sessions, name='sessions'),
     path('ovpn/', include(('ovpn.urls', "ovpn"), namespace="ovpn"))
 ]
 
