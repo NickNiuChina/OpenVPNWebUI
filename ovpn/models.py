@@ -26,12 +26,12 @@ class Servers(models.Model):
     server_name = models.CharField(max_length=100, null=False, blank=False, unique=True)
     configuration_dir = models.CharField(max_length=500, null=False, blank=False)
     service_cmd = models.CharField(max_length=200, null=False, blank=False)
-    STATUS_CHOICE = {0, 1}
-    learn_address_script = STATUS_CHOICE
-    enabled = STATUS_CHOICE
+    STATUS_CHOICE = [[0, 'disabled'], [1, 'enabled']]
+    learn_address_script = models.IntegerField(choices=STATUS_CHOICE, default=1)
+    enabled = models.IntegerField(choices=STATUS_CHOICE, default=1)
     comment = models.TextField(null=True, blank=True, default='')
     creation_time = models.DateTimeField(_('creation time'), default=now)
-    last_modify_time = models.DateTimeField(_('modify time'), default=now)
+    update_time = models.DateTimeField(_('modify time'), default=now)
 
 
 class ClientList(models.Model):

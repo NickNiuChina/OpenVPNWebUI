@@ -5,7 +5,11 @@ from django.contrib import messages
 
 def index(request):
     # messages.success(request, 'The flash messages show successfully.')
-    return render(request, 'ovpn/main.html', {'session_data': request.session})
+    return render(request, 'ovpn/main.html')
+
+
+def users(request):
+    return render(request, 'ovpn/users.html')
 
 
 def show_settings(request):
