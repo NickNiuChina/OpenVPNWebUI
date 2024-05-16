@@ -7,6 +7,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
+import datetime
 
 
 logger = logging.getLogger(__name__)
@@ -26,12 +27,12 @@ class Servers(models.Model):
     server_name = models.CharField(max_length=100, null=False, blank=False, unique=True)
     configuration_dir = models.CharField(max_length=500, null=False, blank=False)
     service_cmd = models.CharField(max_length=200, null=False, blank=False)
-    STATUS_CHOICE = [[0, 'disabled'], [1, 'enabled']]
+    STATUS_CHOICE = [(0, "disabled"), (1, "enabled")]
     learn_address_script = models.IntegerField(choices=STATUS_CHOICE, default=1)
     enabled = models.IntegerField(choices=STATUS_CHOICE, default=1)
     comment = models.TextField(null=True, blank=True, default='')
-    creation_time = models.DateTimeField(_('creation time'), default=now)
-    update_time = models.DateTimeField(_('modify time'), default=now)
+    creation_time = models.DateTimeField(default=datetime.datetime.now, null=False, blank=False)
+    update_time = models.DateTimeField(default=datetime.datetime.now, null=False, blank=False)
 
 
 class ClientList(models.Model):

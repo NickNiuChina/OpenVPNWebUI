@@ -1,11 +1,17 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib import messages
+from .models import Servers
 
 
 def index(request):
     # messages.success(request, 'The flash messages show successfully.')
     return render(request, 'ovpn/main.html')
+
+
+def servers(request):
+    servers = Servers.objects.all()
+    return render(request, 'ovpn/servers.html', {"servers": servers})
 
 
 def users(request):

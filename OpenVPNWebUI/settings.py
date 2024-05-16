@@ -143,3 +143,5 @@ if version_file_path.is_file():
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
