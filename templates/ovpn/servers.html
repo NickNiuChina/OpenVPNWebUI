@@ -60,7 +60,7 @@
 						<table id="tb_servers_list" class="table table-striped table-bordered table-hover">
 							<thead>
 								<tr>
-									<th>#</th>
+									<th>UUID</th>
 									<th>Service</th>
 									<th>cmd</th>
 									<th>status</th>
@@ -77,10 +77,10 @@
 									<th> {{server.server_name}}</th>
 									<th>{{server.service_cmd}}</th>
 									<th>
-										{% if server.enabled == 1 %}
-											enabled
+										{% if server.managed == 1 %}
+											managed
 										{% else %}
-											disabled
+											unmanaged
 										{% endif %}
 									</th>
 									<th>{{server.configuration_dir}}</th>

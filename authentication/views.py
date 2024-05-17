@@ -6,6 +6,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.contrib import messages
 from django.utils.encoding import force_bytes, force_str
 from django.core.signing import Signer, SignatureExpired
+from ovpn.models import Servers
 
 
 class LoginForm(forms.Form):
@@ -52,6 +53,7 @@ def login(request, next=None):
                 # for seven days
                 request.session["authenticated"].update({'remember': 'on'})
                 request.session.set_expiry(60 * 60 * 24 * 7)
+
             if redirect_url in ["/", reverse('authentication:login')] or not str(redirect_url).startswith("/"):
                 return redirect('ovpn:index')
             else:

@@ -2,10 +2,16 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib import messages
 from .models import Servers
+import platform
+import datetime
 
 
 def index(request):
-    # messages.success(request, 'The flash messages show successfully.')
+    system_info = {
+        'system_type': platform.system(),
+        'system_version': platform.version(),
+        'system_time': datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S"),
+        }
     return render(request, 'ovpn/main.html')
 
 
