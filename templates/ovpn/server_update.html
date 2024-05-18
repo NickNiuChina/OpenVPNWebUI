@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}OpenVPN servers Management{% endblock %}
+{% block content %}
+
+{# Content Wrapper. Contains page content #}
+<div class="content-wrapper">
+
+	{# Content Header (Page header) #}
+	<div class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1 class="m-0">OpenVPN services management</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="{% url 'ovpn:index' %}">Home</a></li>
+						<li class="breadcrumb-item active">Main</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+	{#  content-header END #}
+
+	<section class="content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+					{% if messages %}
+						<ul class="flashes">
+						{% for message in messages %}
+							<div class="text-{{ message.tags }}">
+								{{ message }}
+							</div>
+					{% endfor %}
+						</ul>
+					{% endif %}
+
+				</div>
+			</div>
+
+		{# update OpenVPN service #}
+		<div class="col-md-6 mx-auto">
+			<div class="card card-primary">
+				<div class="card-header">
+					<h3 class="card-title">Update this OpenVPN service</h3>
+				</div>
+
+			<form method="post">
+				{% csrf_token %}
+				<div class="card-body">
+
+					<div class="form-group">
+						<label for="openvpn_service_id">OpenVPN serice UUID</label>
+						<input type="text" value="{{id}}" class="form-control"  id="openvpn_service_id" placeholder="uuid" readonly>
+					</div>
+
+					<div class="form-group">
+						<label for="{{ form.server_name.id_for_label }}">OpenVPN service name</label>
+						<input type="text" value="{{form.server_name.value}}" class="form-control" name="{{form.server_name.html_name }}" id="{{ form.server_name.id_for_label }}" placeholder="openvpn service name">
+					</div>
+
+					<div class="form-group">
+						<label for="{{ form.configuration_dir.id_for_label }}">OpenVPN configuration dir</label>
+						<input type="text" value="{{form.configuration_dir.value}}" class="form-control" name="{{form.configuration_dir.html_name }}" id="{{ form.configuration_dir.id_for_label }}" placeholder="OpenVPN configuration dir">
+					</div>
+
+					<div class="form-group">
+						<label for="{{ form.service_cmd.id_for_label }}">OpenVPN service cmd</label>
+						<input type="text" value="{{form.service_cmd.value}}" class="form-control" name="{{form.service_cmd.html_name }}" id="{{ form.service_cmd.id_for_label }}" placeholder="OpenVPN service cmd">
+					</div>
+
+					<div class="form-group">
+						<label for="{{ form.learn_address_script.id_for_label }}">Learn address script:</label>
+						<select class='custom-select' name="{{form.learn_address_script.html_name }}" id="{{ form.learn_address_script.id_for_label }}">
+						  {% if form.learn_address_script.value == 1 %}
+							<option value="0">disabled</option>
+							<option value="1" selected>enabled</option>
+						  {% else %}
+							<option value="0" selected>disabled</option>
+							<option value="1">enabled</option>
+						  {% endif %}
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="{{ form.managed.id_for_label }}">If managed by this APP:</label>
+						<select class='custom-select' name="{{form.managed.html_name }}" id="{{ form.managed.id_for_label }}">
+						  {% if form.managed.value == 1 %}
+							<option value="0">disabled</option>
+							<option value="1" selected>enabled</option>
+						  {% else %}
+							<option value="0" selected>disabled</option>
+							<option value="1">enabled</option>
+						  {% endif %}
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="{{ form.comment.id_for_label }}">Comments</label>
+						<input type="text" value="{{form.comment.value | default_if_none:''}}" class="form-control" name="{{form.comment.html_name }}" id="{{ form.comment.id_for_label }}" placeholder="comment">
+					</div>
+
+				</div>
+
+				<div class="card-footer">
+					<a href="{% url 'ovpn:servers' %}" class="btn btn-secondary">Cancel and Return</a>
+					<button type="submit" class="btn btn-primary float-right">Confirm Add</button>
+				</div>
+
+			</form>
+		</div>
+
+		</div>
+	</section>
+</div>
+
+{% endblock %}
+

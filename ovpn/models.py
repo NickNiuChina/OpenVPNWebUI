@@ -33,7 +33,7 @@ class Servers(models.Model):
     managed = models.IntegerField(choices=STATUS_CHOICE, default=1)
     comment = models.TextField(null=True, blank=True, default='')
     creation_time = models.DateTimeField(default=datetime.datetime.now, null=False, blank=False)
-    update_time = models.DateTimeField(default=datetime.datetime.now, null=False, blank=False)
+    update_time = models.DateTimeField(auto_now=True, null=False, blank=False)
 
 
 class ClientList(models.Model):
