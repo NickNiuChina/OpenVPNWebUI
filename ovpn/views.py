@@ -6,16 +6,58 @@ import platform
 import datetime
 from .forms import ServersForm
 import uuid
-import datetime
+import psutil
+import time
 
 
 def index(request):
+    system_type = platform.system()
     system_info = {
-        'system_type': platform.system(),
-        'system_version': platform.version(),
-        'system_time': datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S"),
+        "system_type": system_type,
+        "system_version": platform.version(),
+        "system_time": datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S"),
+        "cpu_cores": psutil.cpu_count(),
+    }
+
+    boot_time_timestamp = psutil.boot_time()
+    current_time_timestamp = time.time()
+    uptime_seconds = current_time_timestamp - boot_time_timestamp
+    uptime_minutes = uptime_seconds // 60
+    uptime_hours = uptime_minutes // 60
+    uptime_days = uptime_hours // 24
+    uptime_str = f"{int(uptime_days)} days,{int(uptime_hours % 24)}:{int(uptime_minutes % 60)}:{int(uptime_seconds % 60)}"
+
+    load_avg = psutil.getloadavg()
+    memory_total = round(psutil.virtual_memory().total/1024/1024, 1)
+    memory_used = round(psutil.virtual_memory().used/1024/1024, 1)
+    memory_percent = psutil.virtual_memory().percent
+    swap_total = round(psutil.swap_memory().total/1024/1024, 1)
+    swap_used = round(psutil.swap_memory().used/1024/1024, 1)
+    swap_percent = round(psutil.swap_memory().percent/1024/1024, 1)
+
+    if system_type.startswith("Linux"):
+        openvpn_version = "NA"
+    else:
+        openvpn_version = "NA"
+    system_information = platform.platform()
+
+    system_info.update(
+        {
+            "system_uptime": uptime_str,
+            "load_avg": load_avg,
+            "memory_total": memory_total,
+            "memory_used": memory_used,
+            "memory_percent": memory_percent,
+            "swap_total": swap_total,
+            "swap_used": swap_used,
+            "swap_percent": swap_percent,
+            "openvpn_version": openvpn_version,
+            "system_information": system_information
         }
-    return render(request, 'ovpn/main.html')
+    )
+    context = {'system_info': system_info}
+    print(context)
+    return render(request, 'ovpn/main.html', context)
 
 
 def servers(request):

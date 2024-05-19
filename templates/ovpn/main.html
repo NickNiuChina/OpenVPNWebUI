@@ -37,32 +37,24 @@
 
 	<section class="content">
 		<div class="container-fluid">
-		<div class="placeholders">
+		<div class=""> {# class="placeholders" #}
 		  	<div class="row">
 
 			  <div class="col-lg-3 col-6">
-				<div class="small-box bg-info shadow">
+				<div class="small-box bg-info">
 				  <div class="inner">
 					<h3>OS </h3>
 					<div class="info-box-content">
 					  <span class="info-box-text">
-						<span class="info-box-number2">Debian</span>
+						<span class="info-box-number2">{{ system_info.system_type }}</span>
 					  </span><br>
 					  <span class="info-box-text">
-						Out: <span class="info-box-number2"> 12.0.1 </span>
+						<span class="info-box-number2"> {{ system_info.system_version }} </span>
 					  </span>
 					</div>
 				  </div>
 				  <div class="icon">
-					<i class="ion-md-tv"></i>
-				  </div>
-				  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-				  <div class="card-group" id="accordion">
-				  </div>
-				  <div id="collapseOne" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-					<div class="card-body text-center">
-					  <span>Operating system version info</span>
-					</div>
+					<i class="ion ion-md-tv"></i>
 				  </div>
 				</div>
 			  </div>
@@ -74,27 +66,19 @@
 					<div class="info-box-content">
 					  <span class="info-box-text">
 						CPU count: <span class="info-box-number2">
-						1
+						{{system_info.cpu_cores}}
 						</span>
 					  </span><br>
 					  <span class="info-box-number">
-						1m: <b>11</b> &nbsp; &nbsp;
-						5m: <b>11</b> &nbsp; &nbsp;
-						15m: <b>11</b><br/>
+						1m: <b>{{ system_info.load_avg.0 }}</b> &nbsp; &nbsp;
+						5m: <b>{{ system_info.load_avg.1 }}</b> &nbsp; &nbsp;
+						15m: <b>{{ system_info.load_avg.2 }}</b><br/>
 					  </span>
 					</div>
 				  </div>
 				  <div class="icon">
-					<i class="ion-md-stats"></i>
+					<i class="ion ion-md-stats"></i>
 				  </div>
-				  <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-					<div class="card-group" id="accordion">
-					</div>
-					<div id="collapseTwo" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-					  <div class="card-body text-center">
-						<span>Last one, five and ten minutes</span>
-					  </div>
-					</div>
 				</div>
 			  </div>
 
@@ -102,19 +86,11 @@
 				<div class="small-box shadow" style="background-color:#ffc107; color: white;">
 				  <div class="inner">
 					<h3>OS uptime</h3>
-					<span class="info-box-number">1111</span><br/><br/>
+					<span class="info-box-number">{{system_info.system_uptime}}</span><br/><br/>
 				  </div>
 				  <div class="icon">
-					<i class="ion-md-trending-up"></i>
+					<i class="ion ion-md-trending-up"></i>
 				  </div>
-				  <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-					<div class="card-group" id="accordion">
-					</div>
-					<div id="collapseThree" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-					  <div class="card-body text-center">
-						<span>How long your server is running</span>
-					  </div>
-					</div>
 				</div>
 			  </div>
 
@@ -123,20 +99,12 @@
 				  <div class="inner">
 					<h3>Server Time</h3>
 					<span class="info-box-number">
-					  11111111111111
+					  {{system_info.system_time}}
 					</span><br/><br/>
 				  </div>
 				  <div class="icon">
-					<i class="ion-md-time"></i>
+					<i class="ion ion-md-time"></i>
 				  </div>
-				  <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-					<div class="card-group" id="accordion">
-					</div>
-					<div id="collapseFour" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-					  <div class="card-body text-center">
-						<span>Server time in it's local Time Zone</span>
-					  </div>
-					</div>
 				</div>
 			  </div>
 
@@ -152,10 +120,10 @@
 				  <div class="card-body">
 					<div class="progress-group">
 					  <span class="progress-number">
-						Memory <b>39</b>
+						Memory <b>{{ system_info.memory_used }}</b>
 						/
-						345 MB
-						- 45%
+						{{ system_info.memory_total }}
+						- {{ system_info.memory_percent }}%
 					  </span>
 					  <div class="progress progress-xs">
 						<div class="progress-bar bg-primary progress-bar-striped"
@@ -172,10 +140,10 @@
 				  <div class="card-body">
 					<div class="progress-group">
 					  <span class="progress-number">
-						Swap <b>123</b>
+						Swap <b>{{ system_info.swap_used }}</b>
 						/
-						3434 MB
-						- 3424%
+						{{ system_info.swap_total }} MB
+						- {{ system_info.swap_percent }}%
 					  </span>
 					  <div class="progress progress-xs">
 						<div class="progress-bar bg-primary progress-bar-striped"
@@ -188,34 +156,43 @@
 			  </div>
 			</div>
 
-			  <div class="row">
-				<div class="col-md-6 col-sm-12 col-12" style="height: 200px;">
-				  <div class="info-box">
-					<span class="info-box-icon bg-warning elevation-1 border-width: 3px;" style="padding: 10px; width: 100px; height: 100px;">
-					  <img src="/static/img/openvpn-win.svg" alt="OpenVPN" width="74" height="74" style="filter: invert(25%);">
-					</span>
-					  <!--i class="fa fa-info fa-2x"></i></span-->
-					<div class="info-box-content">
-					  <span class="info-box-text">OpenVPN version:</span>
-					  <span class="info-box-number3">xxxxxxxxxxxxxxxxxx</span>
-					</div>
-				  </div>
-				</div>
-
-				<div class="col-md-6 col-sm-12 col-12" style="height: 200px;">
-				  <div class="info-box">
-					<span class="info-box-icon bg-danger elevation-1 border-width: 3px;" style="padding: 10px; width: 100px; height: 100px;">
-						<i class="fa fa-gears fa-2x"></i></span>
-					<div class="info-box-content">
-					  <span class="info-box-text">Operating system:</span>
-					  <span class="info-box-number3">xxxxxxxxxxxxxxxxxxxx</span>
-					</div>
-				  </div>
+		{# OpenVPN version #}
+		  <div class="row">
+			<div class="col-md-6 col-sm-12 col-12" style="height: 200px;">
+			  <div class="info-box">
+				<span class="info-box-icon bg-warning elevation-1 border-width: 3px;" style="padding: 10px; width: 100px; height: 100px;">
+				  <img src="/static/img/openvpn-win.svg" alt="OpenVPN" width="74" height="74" style="filter: invert(25%);">
+				</span>
+				  <!--i class="fa fa-info fa-2x"></i></span-->
+				<div class="info-box-content">
+				  <span class="info-box-text">OpenVPN version:</span>
+				  <span class="info-box-number3">{{system_info.openvpn_version}}</span>
 				</div>
 			  </div>
+			</div>
+
+			<div class="col-md-6 col-sm-12 col-12" style="height: 200px;">
+			  <div class="info-box">
+				<span class="info-box-icon bg-danger elevation-1 border-width: 3px;" style="padding: 10px; width: 100px; height: 100px;">
+					<i class="fa fa-gears fa-2x"></i></span>
+				<div class="info-box-content">
+				  <span class="info-box-text">Operating system:</span>
+				  <span class="info-box-number3">{{ system_info.system_information }}</span>
+				</div>
+			  </div>
+			</div>
+		  </div>
 
 		</div><!-- /.container-fluid -->
   	</section>
 </div>
+
+<script type="text/javascript">
+	function reload() {
+	  document.location.reload();
+	}
+
+	setTimeout(reload, 30000);
+</script>
 {% endblock %}
 

@@ -69,8 +69,26 @@
 					</div>
 
 					<div class="form-group">
+						<label for="{{ form.startup_type.id_for_label }}">Service startup type:</label>
+						<select class='custom-select' name="{{form.startup_type.html_name }}" id="{{ form.startup_type.id_for_label }}">
+						  {% if form.startup_type.value == 1 %}
+							<option value="0">sysv</option>
+							<option value="1" selected>Systemd</option>
+						  {% else %}
+							<option value="0" selected>sysv</option>
+							<option value="1">Systemd</option>
+						  {% endif %}
+						</select>
+					</div>
+
+					<div class="form-group">
 						<label for="{{ form.service_cmd.id_for_label }}">OpenVPN service cmd</label>
 						<input type="text" value="{{form.service_cmd.value}}" class="form-control" name="{{form.service_cmd.html_name }}" id="{{ form.service_cmd.id_for_label }}" placeholder="OpenVPN service cmd">
+					</div>
+
+					<div class="form-group">
+						<label for="{{ form.certs_dir.id_for_label }}">OpenVPN certs dir</label>
+						<input type="text" value="{{form.certs_dir.value}}" class="form-control" name="{{form.certs_dir.html_name }}" id="{{ form.certs_dir.id_for_label }}" placeholder="OpenVPN certs dir">
 					</div>
 
 					<div class="form-group">
