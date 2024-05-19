@@ -35,10 +35,14 @@
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
           <div class="dropdown-divider"></div>
-          <a href="javascript:void(0)" class="dropdown-item active">
-            <i class="fas fa-user-circle mr-2"></i> User: {{ session_data.username }}
-            
+          <a href="javascript:void(0)" class="dropdown-item">
+            <i class="fas fa-user-circle mr-2"></i> User: {{ request.session.authenticated.username }}
           </a>
+          <div class="dropdown-divider"></div>
+          <a href="javascript:void(0)" class="dropdown-item">
+            <i class="fas fa-user-circle mr-2"></i> Group: {{ request.session.authenticated.group }}
+          </a>
+
           <div class="dropdown-divider"></div>
           <a href="{% url 'authentication:logout' %}" class="dropdown-item dropdown-item">Logout</a>
         </div>
