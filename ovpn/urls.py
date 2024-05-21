@@ -25,7 +25,7 @@ urlpatterns = [
     path('servers', views.servers, name='servers'),
     path('servers/delete', views.server_delete, name='server_delete'),
     path('servers/update/<uuid:sid>/', views.server_update, name='server_update'),
-    path('servers/logs', views.server_logs, name='server_logs'),
+    path('<str:ovpn_service>/logs', views.server_logs, name='server_logs'),
     path('show/settings', views.show_settings, name='settings'),
     path('show/sessions', views.show_sessions, name='sessions'),
 ]

@@ -125,7 +125,7 @@ def server_update(request, sid):
             return render(request, 'ovpn/server_update.html', context)
 
 
-def server_logs(request):
+def server_logs(request, ovpn_service=None):
     context = {}
     return render(request, 'ovpn/logs.html', context)
 
