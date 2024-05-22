@@ -54,7 +54,7 @@
 				<div class="card-body">
 
 					<div class="form-group">
-						<label for="openvpn_service_id">OpenVPN serice UUID</label>
+						<label for="openvpn_service_id">OpenVPN service UUID</label>
 						<input type="text" value="{{id}}" class="form-control"  id="openvpn_service_id" placeholder="uuid" readonly>
 					</div>
 
@@ -65,7 +65,22 @@
 
 					<div class="form-group">
 						<label for="{{ form.configuration_dir.id_for_label }}">OpenVPN configuration dir</label>
-						<input type="text" value="{{form.configuration_dir.value}}" class="form-control" name="{{form.configuration_dir.html_name }}" id="{{ form.configuration_dir.id_for_label }}" placeholder="OpenVPN configuration dir">
+						<input type="text" value="{{form.configuration_dir.value | default_if_none:''}}" class="form-control" name="{{form.configuration_dir.html_name }}" id="{{ form.configuration_dir.id_for_label }}" placeholder="OpenVPN configuration dir">
+					</div>
+
+					<div class="form-group">
+						<label for="{{ form.configuration_file.id_for_label }}">OpenVPN configuration file</label>
+						<input type="text" value="{{form.configuration_file.value | default_if_none:'' }}" class="form-control" name="{{form.configuration_file.html_name }}" id="{{ form.configuration_file.id_for_label }}" placeholder="OpenVPN configuration file">
+					</div>
+
+					<div class="form-group">
+						<label for="{{ form.status_file.id_for_label }}">OpenVPN status file</label>
+						<input type="text" value="{{form.status_file.value | default_if_none:'' }}" class="form-control" name="{{form.status_file.html_name }}" id="{{ form.status_file.id_for_label }}" placeholder="OpenVPN status file">
+					</div>
+
+					<div class="form-group">
+						<label for="{{ form.log_file.id_for_label }}">OpenVPN log file</label>
+						<input type="text" value="{{form.log_file.value | default_if_none:'' }}" class="form-control" name="{{form.log_file.html_name }}" id="{{ form.log_file.id_for_label }}" placeholder="OpenVPN log file">
 					</div>
 
 					<div class="form-group">
@@ -83,12 +98,12 @@
 
 					<div class="form-group">
 						<label for="{{ form.service_cmd.id_for_label }}">OpenVPN service cmd</label>
-						<input type="text" value="{{form.service_cmd.value}}" class="form-control" name="{{form.service_cmd.html_name }}" id="{{ form.service_cmd.id_for_label }}" placeholder="OpenVPN service cmd">
+						<input type="text" value="{{form.service_cmd.value | default_if_none:'' }}" class="form-control" name="{{form.service_cmd.html_name }}" id="{{ form.service_cmd.id_for_label }}" placeholder="OpenVPN service cmd">
 					</div>
 
 					<div class="form-group">
 						<label for="{{ form.certs_dir.id_for_label }}">OpenVPN certs dir</label>
-						<input type="text" value="{{form.certs_dir.value}}" class="form-control" name="{{form.certs_dir.html_name }}" id="{{ form.certs_dir.id_for_label }}" placeholder="OpenVPN certs dir">
+						<input type="text" value="{{form.certs_dir.value | default_if_none:'' }}" class="form-control" name="{{form.certs_dir.html_name }}" id="{{ form.certs_dir.id_for_label }}" placeholder="OpenVPN certs dir">
 					</div>
 
 					<div class="form-group">
@@ -115,6 +130,16 @@
 							<option value="1">enabled</option>
 						  {% endif %}
 						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="{{ form.management_port.id_for_label }}">Management port</label>
+						<input type="text" value="{{form.management_port.value | default_if_none:''}}" class="form-control" name="{{form.management_port.html_name }}" id="{{ form.management_port.id_for_label }}" placeholder="management port">
+					</div>
+
+					<div class="form-group">
+						<label for="{{ form.management_password.id_for_label }}">Management password</label>
+						<input type="password" value="{{form.management_password.value | default_if_none:''}}" class="form-control" name="{{form.management_password.html_name }}" id="{{ form.management_password.id_for_label }}" placeholder="management password">
 					</div>
 
 					<div class="form-group">

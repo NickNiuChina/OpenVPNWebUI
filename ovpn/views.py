@@ -56,7 +56,6 @@ def index(request):
         }
     )
     context = {'system_info': system_info}
-    print(context)
     return render(request, 'ovpn/main.html', context)
 
 
@@ -66,7 +65,6 @@ def servers(request):
 
     if request.method == "POST":
         formset = ServersForm(request.POST)
-        print(request.POST)
         if formset.is_valid():
             formset.save()
             messages.success(request, "New server has been added successfully!")
@@ -114,7 +112,6 @@ def server_update(request, sid):
 
     elif request.method == 'POST':
         form = ServersForm(request.POST, instance=server)
-        print("POST: " + str(request.POST))
         if form.is_valid():
             form.save()
             messages.success(request, 'The service has been updated successfully.')

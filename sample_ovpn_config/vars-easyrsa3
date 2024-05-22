@@ -1,0 +1,9 @@
+set_var EASYRSA_REQ_COUNTRY     "CN"
+set_var EASYRSA_REQ_PROVINCE    "JIANGSU"
+set_var EASYRSA_REQ_CITY        "SUZHOU"
+set_var EASYRSA_REQ_ORG         "Better_Qualtity"
+set_var EASYRSA_REQ_EMAIL       "nick_niu@hotmail.com"
+set_var EASYRSA_REQ_OU          "BQ-LTD"
+set_var EASYRSA_NO_PASS 1
+set_var EASYRSA_CA_EXPIRE       3650
+set_var EASYRSA_CERT_EXPIRE     3650

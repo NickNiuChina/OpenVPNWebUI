@@ -31,16 +31,24 @@
 					<div class="row">
 
 					  {% if request.session.authenticated.group in 'SUPER,ADMIN' %}
+						<div class="col-sm-10">
+						<label for="{{ form.startup_type.id_for_label }}">Service startup type:</label>
+						<select class='select' name="{{form.startup_type.html_name }}" id="{{ form.startup_type.id_for_label }}">
+						  {% if form.startup_type.value == 1 %}
+							<option value="0">sysv</option>
+							<option value="1" selected>Systemd</option>
+						  {% else %}
+							<option value="0" selected>sysv</option>
+							<option value="1">Systemd</option>
+						  {% endif %}
+						</select>
+						</div>
+						<div class="col-sm-auto">
+							<button type="button" class="btn btn-primary float-right">Add new server</button>
+						</div>
 
-						<div class="col-sm-auto">
-							<button type="button" class="btn btn-primary" data-toggle="modal"
-								data-target="#addOpenVPNService">Add new server</button>
-						</div>
-						<div class="col-sm-auto">
-							<button type="button" class="btn btn-danger" data-toggle="modal"
-								data-target="#deleteOpenVPNService">Delete a server</button>
-						</div>
 					  {% endif %}
+
 					</div>
 
 					{% if messages %}
