@@ -35,7 +35,7 @@ class Servers(models.Model):
     status_file = models.CharField(max_length=500, null=True, blank=True)
     log_file = models.CharField(max_length=500, null=True, blank=True)
     startup_type = models.IntegerField(choices=STARTUP_CHOICE, default=1)
-    service_cmd = models.CharField(max_length=200, null=False, blank=False)
+    startup_service = models.CharField(max_length=200, null=False, blank=False)
     certs_dir = models.CharField(max_length=200, null=False, blank=False)
     learn_address_script = models.IntegerField(choices=STATUS_CHOICE, default=1)
     managed = models.IntegerField(choices=STATUS_CHOICE, default=1)

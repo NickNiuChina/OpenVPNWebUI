@@ -12,7 +12,7 @@ class ServersForm(forms.ModelForm):
             "status_file",
             "log_file",
             "startup_type",
-            "service_cmd",
+            "startup_service",
             "certs_dir",
             "learn_address_script",
             "managed",

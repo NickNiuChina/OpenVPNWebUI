@@ -97,8 +97,8 @@
 					</div>
 
 					<div class="form-group">
-						<label for="{{ form.service_cmd.id_for_label }}">OpenVPN service cmd</label>
-						<input type="text" value="{{form.service_cmd.value | default_if_none:'' }}" class="form-control" name="{{form.service_cmd.html_name }}" id="{{ form.service_cmd.id_for_label }}" placeholder="OpenVPN service cmd">
+						<label for="{{ form.startup_service.id_for_label }}">OpenVPN startup service</label>
+						<input type="text" value="{{form.startup_service.value | default_if_none:'' }}" class="form-control" name="{{form.startup_service.html_name }}" id="{{ form.startup_service.id_for_label }}" placeholder="OpenVPN startup service">
 					</div>
 
 					<div class="form-group">
