@@ -1,3 +1,5 @@
+import subprocess
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -8,13 +10,16 @@ from .forms import ServersForm
 import uuid
 import psutil
 import time
+import pathlib
+from utils.OpenVPNParser import OpenVPNParser
+from utils.LogParser import LogParser
 
 
 def index(request):
     system_type = platform.system()
     system_info = {
         "system_type": system_type,
-        "system_version": platform.version(),
+        "system_version": platform.release(),
         "system_time": datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S"),
         "cpu_cores": psutil.cpu_count(),
     }
@@ -36,7 +41,7 @@ def index(request):
     swap_percent = round(psutil.swap_memory().percent/1024/1024, 1)
 
     if system_type.startswith("Linux"):
-        openvpn_version = "NA"
+        openvpn_version = OpenVPNParser.get_openvpn_version()
     else:
         openvpn_version = "NA"
     system_information = platform.platform()
@@ -124,7 +129,42 @@ def server_update(request, sid):
 
 def server_logs(request, ovpn_service=None):
     context = {}
-    return render(request, 'ovpn/server_logs.html', context)
+    ovpn_logs = []
+    ovpn_service = Servers.objects.filter(server_name=ovpn_service).first()
+    context.update({"server": ovpn_service})
+    if platform.system().startswith("Linux"):
+        logs_file_dir = pathlib.Path(ovpn_service.configuration_dir)
+        if logs_file_dir.exists():
+            for f in list(logs_file_dir.iterdir()):
+                if f.is_file() and f.name.endswith(".log"):
+                    ovpn_logs.append({"log_name": f.name, "log_size": round(f.stat().st_size/1024, 1)})
+            if not ovpn_logs:
+                messages.error(request, "No OpenVPN logfiles found!")
+                return render(request, 'ovpn/server_logs.html', context)
+            else:
+                context.update({"ovpn_logs": ovpn_logs})
+                return render(request, 'ovpn/server_logs.html', context)
+        else:
+            messages.error(request, "The OpenVPN logs file dir do not exist!")
+            return render(request, 'ovpn/server_logs.html', context)
+    else:
+        messages.error(request, "This APP should run on linux debian platform!:")
+        return render(request, 'ovpn/server_logs.html', context)
+
+
+def server_log(request, ovpn_service=None, log_file=None):
+    context = {}
+    ovpn_service = Servers.objects.filter(server_name=ovpn_service).first()
+    logs_file_dir = pathlib.Path(ovpn_service.configuration_dir, log_file)
+    log_size = int(ovpn_service.log_size)
+    context.update({"log_size": log_size, "ovpn_service": ovpn_service})
+    if logs_file_dir.is_file():
+        log_content = LogParser.read_log(log_size, logs_file_dir)
+        print("LOG: " + str(log_content))
+        context.update({"log_content": log_content})
+    else:
+        messages.error(request, "Logfile does not exist!")
+    return render(request, 'ovpn/server_log.html', context)
 
 
 def users(request):

@@ -70,9 +70,9 @@
 						</span>
 					  </span><br>
 					  <span class="info-box-number">
-						1m: <b>{{ system_info.load_avg.0 }}</b> &nbsp; &nbsp;
-						5m: <b>{{ system_info.load_avg.1 }}</b> &nbsp; &nbsp;
-						15m: <b>{{ system_info.load_avg.2 }}</b><br/>
+						1m: <b>{{ system_info.load_avg.0 | floatformat:2 }}</b> &nbsp; &nbsp;
+						5m: <b>{{ system_info.load_avg.1 | floatformat:2 }}</b> &nbsp; &nbsp;
+						15m: <b>{{ system_info.load_avg.2 | floatformat:2 }}</b><br/>
 					  </span>
 					</div>
 				  </div>

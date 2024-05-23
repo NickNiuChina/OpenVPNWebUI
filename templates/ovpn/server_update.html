@@ -79,6 +79,11 @@
 					</div>
 
 					<div class="form-group">
+						<label for="{{ form.log_file_dir.id_for_label }}">OpenVPN log file dir </label>
+						<input type="text" value="{{form.log_file_dir.value | default_if_none:'' }}" class="form-control" name="{{form.log_file_dir.html_name }}" id="{{ form.log_file_dir.id_for_label }}" placeholder="OpenVPN log file dir">
+					</div>
+
+					<div class="form-group">
 						<label for="{{ form.log_file.id_for_label }}">OpenVPN log file</label>
 						<input type="text" value="{{form.log_file.value | default_if_none:'' }}" class="form-control" name="{{form.log_file.html_name }}" id="{{ form.log_file.id_for_label }}" placeholder="OpenVPN log file">
 					</div>

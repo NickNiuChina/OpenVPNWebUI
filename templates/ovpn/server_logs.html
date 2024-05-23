@@ -27,25 +27,6 @@
 	<section class="content">
 		<div class="container-fluid">
 			<div class="row">
-			<form class="form-inline mb-2 col-sm-12">
-				<div class="form-group col-sm-2">
-				  <label class="col-sm-7" for="inlineFormInputName2">Show lines:</label>
-				  <select type="select" class="form-control custom-select col-sm-5 " id="inlineFormInputName2" placeholder="lines">
-				  			<option value="300" selected>300</option>
-							<option value="1000">1000</option>
-				  			<option value="3000">3000</option>
-							<option value="-1">All</option>
-				  </select>
-<select id="id_customer" name="customer">
-{% for x, y in form.fields.customer.choices %}
-    <option value="{{ x }}"{% if form.fields.customer.value == x %} selected{% endif %}>{{ y }}</option>
-{% endfor %}
-</select>
-				</div>
-
-				<button type="submit" class="btn btn-primary col-sm-1 offset-sm-9">Confirm</button>
-
-			</form>
 			</div>
 
 			{% if messages %}
@@ -62,73 +43,32 @@
 			    <div class="card-header">
 			    </div> {# /.card-header #}
 			    <div class="card-body">
-
-					<div class="card card-default">
-					  <div class="card-header with-border">
-						<h3 class="card-title">OpenVPN Server log</h3>
-						  <div class="pull-right card-tools">
-							<button type="button" class="btn btn-tool" data-card-widget="collapse">
-							  <i class="fa fa-minus"></i></button>
-						  </div>
-					  </div>
-					  <div class="card-body">
-						<form role="form">
-						  <div class="form-group" >
-							<textarea type="text" class="form-control my-textarea" name="Logs"
-							 id="Logs" spellcheck="false" rows="15">
-
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 DCO version: N/A'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 MANAGEMENT: client_uid=0'
-2024-05-20T18:46:52+0000 [-] (UNIX Port /usr/local/openvpn_as/etc/sock/omisock-3Jvo9Z08zxsi Closed)
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 MANAGEMENT: Connected to management server at /usr/local/openvpn_as/etc/sock/omisock-3Jvo9Z08zxsi'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: "2024-05-20 18:46:52 MANAGEMENT: CMD 'state on'"
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: "2024-05-20 18:46:52 MANAGEMENT: CMD 'echo on'"
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: "2024-05-20 18:46:52 MANAGEMENT: CMD 'bytecount 300'"
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: "2024-05-20 18:46:52 MANAGEMENT: CMD 'env-filter 1'"
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: "2024-05-20 18:46:52 MANAGEMENT: CMD 'hold off'"
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: "2024-05-20 18:46:52 MANAGEMENT: CMD 'hold release'"
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 net_route_v4_best_gw query: dst 0.0.0.0'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 net_route_v4_best_gw result: via 192.168.8.1 dev enp0s17'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 NOTE: --fast-io is disabled since we are not using UDP'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 Note: OpenSSL hardware crypto engine functionality is not available'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 Diffie-Hellman initialized with 4096 bit key'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 TUN/TAP device as0t0 opened'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 TUN/TAP TX queue length set to 200'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 MANAGEMENT: >STATE:1716230812,ASSIGN_IP,,172.27.224.1,,,,'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 net_iface_mtu_set: mtu 1500 for as0t0'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 net_iface_up: set as0t0 up'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 net_addr_v4_add: 172.27.224.1/22 dev as0t0'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 Could not determine IPv4/IPv6 protocol. Using AF_INET'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 Socket Buffers: R=[131072->131072] S=[16384->16384]'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 Listening for incoming TCP connection on [AF_INET][undef]:914'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 Socket flags: TCP_NODELAY=1 succeeded'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 TCPv4_SERVER link local (bound): [AF_INET][undef]:914'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 TCPv4_SERVER link remote: [AF_UNSPEC]'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: "2024-05-20 18:46:52 chroot to '/run/openvpn_as' and cd to '/' succeeded"
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 UID set to openvpn_as'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 GID set to openvpn_as'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 Capabilities retained: CAP_NET_ADMIN'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 memstats data will be written to /memstats/memstat-tpVJv6gfqmc2.dat'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 MULTI: multi_init called, r=4096 v=4096'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 MULTI: TCP INIT maxclients=2048 maxevents=2053'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 Initialization Sequence Completed'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 MANAGEMENT: >STATE:1716230812,CONNECTED,SUCCESS,172.27.224.1,,,,'
-2024-05-20T18:46:52+0000 [stdout#info] [OVPN 0] OUT: '2024-05-20 18:46:52 PORT SHARE PROXY: proxy starting'
-2024-05-20T18:46:52+0000 [stdout#info] License Info {'concurrent_connections': 2, 'apc': False}
-2024-05-20T18:46:52+0000 [-] OMIServerAuthFactory starting on '/usr/local/openvpn_as/etc/sock/omisock-UvDiLC9Dv7gT'
-							</textarea>
-						  </div>
-						</form>
-						<span id="helpBlock" class="text-muted">Last 300 lines of openvpn.log</span>
-					  </div>
-					  <!-- /.card-body -->
+					<div class="table-responsive">
+						<table id="tb_servers_list" class="table table-striped table-bordered table-hover">
+							<thead>
+								<tr>
+									<th>Log file name</th>
+									<th>size(KB)</th>
+									<th>Operation</th>
+								</tr>
+							</thead>
+							<tbody>
+							{% if ovpn_logs %}
+							{% for log in ovpn_logs %}
+								<tr>
+									<th>{{ log.log_name }}</th>
+									<th>{{ log.log_size }}</th>
+									<th>
+										<a href="{% url 'ovpn:server_log' ovpn_service=server.server_name log_file=log.log_name %}" class="btn btn-primary">View</a>
+										<a href="{% url 'ovpn:server_logs' ovpn_service=server.server_name %}" class="btn btn-primary">Delete</a>
+										<a href="{% url 'ovpn:server_logs' ovpn_service=server.server_name %}" class="btn btn-primary">Download</a>
+									</th>
+								</tr>
+							{%  endfor %}
+							{% endif %}
+							</tbody>
+						</table>
 					</div>
-					<!--script>
-					  createEditor("Logs", "700px", "clouds", "ovpn", true);
-					</script-->
-
-
-
 			    </div>
 			</div>
 		</div>
@@ -136,6 +76,4 @@
 
 	</section>
 </div>
-<script src="{% static 'js/custom.js' %}"></script>
-<script src="{% static 'js/ace/ace.js' %}"></script>
 {% endblock %}

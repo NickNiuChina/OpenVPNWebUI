@@ -27,12 +27,14 @@ class Servers(models.Model):
     """OpenVPN servers model"""
     STATUS_CHOICE = [(0, "disabled"), (1, "enabled")]
     STARTUP_CHOICE = [(0, "sysv"), (1, "systemd")]
+    LOG_IZE_CHOICE = [(-1, -1), (300, 300), (1000, 1000), (3000, 3000)]
 
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     server_name = models.CharField(max_length=100, null=False, blank=False, unique=True)
     configuration_dir = models.CharField(max_length=500, null=False, blank=False, unique=True)
     configuration_file = models.CharField(max_length=500, null=False, blank=False)
     status_file = models.CharField(max_length=500, null=True, blank=True)
+    log_file_dir = models.CharField(max_length=500, null=True, blank=True)
     log_file = models.CharField(max_length=500, null=True, blank=True)
     startup_type = models.IntegerField(choices=STARTUP_CHOICE, default=1)
     startup_service = models.CharField(max_length=200, null=False, blank=False)
@@ -46,6 +48,7 @@ class Servers(models.Model):
         validators=[MinValueValidator(1025), MaxValueValidator(65536)]
     )
     management_password = models.CharField(max_length=100, null=True, blank=True, default='')
+    log_size = models.IntegerField(choices=STARTUP_CHOICE, default=300)
     comment = models.TextField(null=True, blank=True, default='')
     creation_time = models.DateTimeField(default=datetime.datetime.now, null=False, blank=False)
     update_time = models.DateTimeField(auto_now=True, null=False, blank=False)

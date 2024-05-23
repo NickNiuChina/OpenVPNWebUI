@@ -10,6 +10,7 @@ class ServersForm(forms.ModelForm):
             "configuration_dir",
             "configuration_file",
             "status_file",
+            "log_file_dir",
             "log_file",
             "startup_type",
             "startup_service",
