@@ -153,14 +153,15 @@ def server_logs(request, ovpn_service=None):
 
 
 def server_log(request, ovpn_service=None, log_file=None):
+    if request.method == "POST":
+        print("ARGS: " + str(request.POST))
     context = {}
     ovpn_service = Servers.objects.filter(server_name=ovpn_service).first()
-    logs_file_dir = pathlib.Path(ovpn_service.configuration_dir, log_file)
+    logs_file_dir = pathlib.Path(ovpn_service.log_file_dir, log_file)
     log_size = int(ovpn_service.log_size)
     context.update({"log_size": log_size, "ovpn_service": ovpn_service})
     if logs_file_dir.is_file():
         log_content = LogParser.read_log(log_size, logs_file_dir)
-        print("LOG: " + str(log_content))
         context.update({"log_content": log_content})
     else:
         messages.error(request, "Logfile does not exist!")

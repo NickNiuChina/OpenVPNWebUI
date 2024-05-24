@@ -27,10 +27,10 @@
 	<section class="content">
 		<div class="container-fluid">
 			<div class="row">
-			<form class="form-inline mb-2 col-sm-12">
+			<form method="post" class="form-inline mb-2 col-sm-12">
 				<div class="form-group col-sm-2">
 				  <label class="col-sm-7" for="inlineFormInputName2">Show lines:</label>
-				  <select type="select" class="form-control custom-select col-sm-5 " id="inlineFormInputName2" placeholder="lines">
+				  <select type="select" name="log_size" class="form-control custom-select col-sm-5 " id="inlineFormInputName2" placeholder="lines">
 					<option value="300" {% if log_size == 300 %} selected{% endif %}>300</option>
 					<option value="1000" {% if log_size == 1000 %} selected{% endif %} >1000</option>
 					<option value="3000" {% if log_size == 3000 %} selected{% endif %}>3000</option>
@@ -71,11 +71,8 @@
 						  <div class="form-group" >
 							<textarea type="text" class="form-control my-textarea" name="Logs"
 							 id="Logs" spellcheck="false" rows="15">
-								{% if log_content %}
-									{% for line in log_content %}
-										{{ line }}
-									{% endfor %}
-								{% endif %}
+{% if log_content %}{% for line in log_content %}
+{{ line }}{% endfor %}{% endif %}
 							</textarea>
 						  </div>
 						</form>
