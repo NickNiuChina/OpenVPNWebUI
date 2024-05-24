@@ -28,6 +28,7 @@
 		<div class="container-fluid">
 			<div class="row">
 			<form method="post" class="form-inline mb-2 col-sm-12">
+				{% csrf_token %}
 				<div class="form-group col-sm-2">
 				  <label class="col-sm-7" for="inlineFormInputName2">Show lines:</label>
 				  <select type="select" name="log_size" class="form-control custom-select col-sm-5 " id="inlineFormInputName2" placeholder="lines">
@@ -76,7 +77,7 @@
 							</textarea>
 						  </div>
 						</form>
-						<span id="helpBlock" class="text-muted">Last 300 lines of openvpn.log</span>
+						<span id="helpBlock" class="text-muted">{% if log_size > 0 %}Last {{ log_size }} {% else %} All {% endif %} lines of {{log_file}}</span>
 					  </div>
 					  <!-- /.card-body -->
 					</div>

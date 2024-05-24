@@ -128,12 +128,14 @@ def server_update(request, sid):
 
 
 def server_logs(request, ovpn_service=None):
+    ovpn_service = get_object_or_404(Servers, server_name=ovpn_service)
     context = {}
     ovpn_logs = []
-    ovpn_service = Servers.objects.filter(server_name=ovpn_service).first()
+    # ovpn_service = Servers.objects.filter(server_name=ovpn_service).first()
     context.update({"server": ovpn_service})
+   
     if platform.system().startswith("Linux"):
-        logs_file_dir = pathlib.Path(ovpn_service.configuration_dir)
+        logs_file_dir = pathlib.Path(ovpn_service.log_file_dir)
         if logs_file_dir.exists():
             for f in list(logs_file_dir.iterdir()):
                 if f.is_file() and f.name.endswith(".log"):
@@ -153,13 +155,23 @@ def server_logs(request, ovpn_service=None):
 
 
 def server_log(request, ovpn_service=None, log_file=None):
+    ovpn_service = get_object_or_404(Servers, server_name=ovpn_service)
+    # form to update 
     if request.method == "POST":
-        print("ARGS: " + str(request.POST))
+        new_size = int(request.POST.get("log_size"))
+        if ovpn_service.log_size == new_size:
+            messages.warning(request, "You did not submit a new value!")
+        else:
+            ovpn_service.log_size = new_size
+            ovpn_service.save()
+            messages.success(request, "Log lines has been update successfully!")
+        return redirect('ovpn:server_log', ovpn_service=ovpn_service.server_name, log_file=log_file)
+    
     context = {}
-    ovpn_service = Servers.objects.filter(server_name=ovpn_service).first()
+    
     logs_file_dir = pathlib.Path(ovpn_service.log_file_dir, log_file)
     log_size = int(ovpn_service.log_size)
-    context.update({"log_size": log_size, "ovpn_service": ovpn_service})
+    context.update({"log_size": log_size, "ovpn_service": ovpn_service, "log_file": log_file})
     if logs_file_dir.is_file():
         log_content = LogParser.read_log(log_size, logs_file_dir)
         context.update({"log_content": log_content})
