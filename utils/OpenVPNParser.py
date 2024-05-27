@@ -1,9 +1,13 @@
 import subprocess
+import platform
 
 
 class OpenVPNParser(object):
     @classmethod
     def get_openvpn_version(cls, executor=None) -> str:
+        if not platform.system().startswith("linux"):
+            return ""
+                    
         if not executor:
             p = subprocess.Popen(["openvpn", '--version'],
                                  stdout=subprocess.PIPE,

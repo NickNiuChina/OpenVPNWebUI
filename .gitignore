@@ -54,6 +54,7 @@ coverage.xml
 # Django stuff:
 *.log
 logs/
+!openvpn-udp-tun-1194-status.log
 
 # Sphinx documentation
 docs/_build/

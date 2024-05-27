@@ -1,0 +1,10 @@
+OpenVPN CLIENT LIST
+Updated,2024-05-27 14:55:55
+Common Name,Real Address,Bytes Received,Bytes Sent,Connected Since
+client-openvpn-udp-tun-1194-window-test1,10.70.10.50:53267,3983,3490,2024-05-27 14:55:51
+ROUTING TABLE
+Virtual Address,Common Name,Real Address,Last Ref
+172.16.100.2,client-openvpn-udp-tun-1194-window-test1,10.70.10.50:53267,2024-05-27 14:55:51
+GLOBAL STATS
+Max bcast/mcast queue length,0
+END

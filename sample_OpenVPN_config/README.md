@@ -13,7 +13,7 @@ openvpn --genkey secret ta.key
 mkdir ccd
 ```
 
-3. Prepare the files and start service
+3. Prepare the files
 
   ```
   # ca.crt
@@ -21,7 +21,15 @@ mkdir ccd
   # dh.pem
   # server-xxx.key
   # server-xxx.crt
-  system eanble --now openvpn-udp-tun-1194.service
+  
+  chmod +x learn-address-script-wrapper
   ```
 
-4. tail -f /var/log/openvpn/openvpn-udp-tun-1194.log
+4. Start OpenVPN service and check logs
+
+```
+system eanble --now openvpn-udp-tun-1194.service
+
+tail -f /var/log/openvpn/openvpn-udp-tun-1194.log
+```
+
