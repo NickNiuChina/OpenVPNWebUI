@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# This is explicitly in /bin/sh (==DASH shell on Ubuntu) for faster startup time
+# This script MUST be readable by openvpn user if openvpn service run by user openvpn
+
+# DELETE actions dont get the 'config' env var - so we set explicitly for python script to use
+if [ -z ${config+x} ]; then export config=openvpn-udp-tun-1194.conf ; fi
+
+echo "ionice -c3 nice -n 15 /etc/openvpn/openvpn-udp-tun-1194/learn-address-script-wrapper $1 $2 $3" | at -M now >/dev/null 2>/dev/null
+exit 0

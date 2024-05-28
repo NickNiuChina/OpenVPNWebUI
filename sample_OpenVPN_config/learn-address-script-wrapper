@@ -2,10 +2,22 @@
 
 # This is explicitly in /bin/sh (==DASH shell on Ubuntu) for faster startup time
 
+# This is for debug
+#echo "#############################" >> /var/log/movpn
+#echo $1, $2, $3 >> /var/log/movpn
+#echo "#############################" >> /var/log/movpn
+#printenv >> /var/log/movpn
+
+mon=`date -d today +"%Y_%m"`
+logfile=/var/log/openvpn/openvpn-udp-tun-1194-learn-address-script-${mon}.log
+
 log()
 {
-    echo "$1"
-    logger -i -t "OVPN-UDP-TUN-1194-LD" -- $1
+    # log to syslog
+    #echo "$1"
+    #logger -i -t "OVPN-UDP-TUN-1194-LD" -- $1
+    timehead=`date -d today +"%Y-%m-%d_%T"`
+    echo "$timehead> $1" >> $logfile
 }
 
 log_and_die()
@@ -24,7 +36,7 @@ log "Called with args: '$1 $2 $3' - iphash=$iphash, ncpu=$ncpu - will wait max $
 # https://wiki.ubuntu.com/DashAsBinSh#flock -- use single-digit FDs
 exec 8>$lockf
 /usr/bin/flock -x -w $timeout 8 || log_and_die "Timeout Expired!!"
-output=$(python3 /etc/openvpn/server/learn-address-route53.py $1 $2 $3)
+output=$(python3 /etc/openvpn/openvpn-udp-tun-1194/learn-address-script.py $1 $2 $3)
 res=$?
 log "$output"
 exit $res

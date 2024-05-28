@@ -1,9 +1,17 @@
 #!/usr/bin/env python3
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
+""" Update Router53 record for openvpn client and update client status in DB
+Parameter:
+    option, address, cn[only for op(add, update)]
+Returns:
+    _type_: None
+"""
+
 from __future__ import print_function
 import sys, os, json, boto3
 
 def R53_Upsert_A(r53zoneid, record, ip, ttl):
+
     try:
         botor53client = boto3.client('route53')
         response = botor53client.change_resource_record_sets(
