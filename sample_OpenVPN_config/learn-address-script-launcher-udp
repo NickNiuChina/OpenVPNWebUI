@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# This is for debug
+#echo "#############################" >> /var/log/movpn
+#echo $1, $2, $3 >> /var/log/movpn
+#echo "#############################" >> /var/log/movpn
+#printenv >> /var/log/movpn
+
 # This is explicitly in /bin/sh (==DASH shell on Ubuntu) for faster startup time
 # This script MUST be readable by openvpn user if openvpn service run by user openvpn
 

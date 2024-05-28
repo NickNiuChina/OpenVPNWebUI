@@ -2,12 +2,6 @@
 
 # This is explicitly in /bin/sh (==DASH shell on Ubuntu) for faster startup time
 
-# This is for debug
-#echo "#############################" >> /var/log/movpn
-#echo $1, $2, $3 >> /var/log/movpn
-#echo "#############################" >> /var/log/movpn
-#printenv >> /var/log/movpn
-
 mon=`date -d today +"%Y_%m"`
 logfile=/var/log/openvpn/openvpn-udp-tun-1194-learn-address-script-${mon}.log
 

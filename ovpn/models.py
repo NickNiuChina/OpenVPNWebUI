@@ -67,9 +67,11 @@ class ClientList(models.Model):
     cn = models.CharField(max_length=100, null=False, blank=False, unique=True)
     ip = models.CharField(max_length=20, null=False, blank=False, unique=True)
     toggle_time = models.DateTimeField(default=now)
-    STATUS_CHOICE = {0, 1}
-    enabled = STATUS_CHOICE
-    expire_date = models.DateField(default=now)
-    creation_time = models.DateTimeField(_('creation time'), default=now)
-    last_modify_time = models.DateTimeField(_('modify time'), default=now)
+    STATUS_CHOICE = [(0, "offline"), (1, "online")]
+    ENABLED_CHOICE = [(0, "disabled"), (1, "enabled")]
+    enabled = models.IntegerField(choices=ENABLED_CHOICE, default=1)
+    status = models.IntegerField(choices=STATUS_CHOICE, default=1)
+    expire_date = models.DateField(default=datetime.datetime(1970, 1, 1))
+    create_time = models.DateTimeField(_('creation time'), default=now)
+    update_time = models.DateTimeField(_('modify time'), default=now)
 
