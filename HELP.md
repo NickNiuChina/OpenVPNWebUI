@@ -129,3 +129,14 @@ redirect_url = reverse('my_function', args=(backend,))
 parameters = urlencode(form.cleaned_data)
 return redirect(f'{redirect_url}?{parameters}')
 ```
+
+0. datas
+```
+python .\manage.py shell
+from ovpn.models import Servers, ClientList
+s = Servers.objects.filter(id='178dcc60c7a947c29ca45dc55cef0a4b').first()
+c = ClientList(server=s, cn="nick-test", ip="1.1.1.1")
+c = ClientList(server=s, cn="nick-test2", ip="2.2.2.2")
+c = ClientList(server=s, cn="nick-test3", ip="3.3.3.3")
+c.save()
+```

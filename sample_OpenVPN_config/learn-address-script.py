@@ -133,12 +133,16 @@ def op_db_ovpn_client_status(op, cn, ip):
         if result:
             log ("CN: %s found, will update the status now." % cn)
             log ("Prepared SQL:")
-            sql = """UPDATE {} SET ip = %s, toggle_time = %s, status = %s WHERE cn = %s""".format(config["openvpn_client_table"])
-            input = (ip, times, status, cn)
+            sql = """UPDATE {} SET ip = %s, toggle_time = %s, status = %s, update_time = %s WHERE cn = %s""".format(config["openvpn_client_table"])
+            input = (ip, times, status, datetime.datetime.now(), cn)
             log ( sql + " With args: " + str(input))
-            cur.execute(sql, input)
+            result = cur.execute(sql, input)            
             conn.commit()
             conn.close()
+            if result > 0:
+                 log ("Successfully insert the above record.")               
+            else:
+                log ("ERROR: Failed to insert the above record.")
             log ("\t Update sql exec done.")
         else:
             if op == "update" or op == "add":
@@ -152,10 +156,15 @@ def op_db_ovpn_client_status(op, cn, ip):
                 sql = """INSERT INTO {} (id, cn, ip, toggle_time, expire_date, status, create_time, update_time, server_id, enabled) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""".format(config["openvpn_client_table"])
                 input = (uuid.uuid4().hex, cn, ip, times, datetime.datetime(1970, 1, 1),status, datetime.datetime.now(), datetime.datetime.now(), service_uuid, 1)
                 log (sql + " With args: " + str(input))
-                cur.execute(sql, input)
+                result = cur.execute(sql, input)
+                if result > 0:
+                    log ("Successfully update the above record.")               
+                else:
+                    log ("ERROR: Failed to update the above record.")
+                log("result: " + str(result))
                 conn.commit()
                 conn.close()
-                log ("\t Insert sql exec done.")
+                log ("Insert sql exec done.")
             if op == "delete":
                 log ("CN: %s not found, try to delete an list which does not exist!!" % cn)
     except Exception as e:
@@ -168,7 +177,8 @@ if __name__ == "__main__":
             print("Syntax: add|update|delete <ipaddress> [<CertificateCN>]")
             exit(3)
 
-        log ("executed start!***************************************************************")
+        log ("executed start!")
+        log ("***************************************************************")
         # OPENVPN_CACHE_JSON_FILENAME = r'/run/shm/openvpn-cloud-init.json'
         # with open(OPENVPN_CACHE_JSON_FILENAME) as cache_json_file:
         #     cfgcache_json = json.load(cache_json_file)
@@ -202,7 +212,8 @@ if __name__ == "__main__":
             exit(1)
         log("op: " + op + " " + "cn: " + cn + " " + "ip: " + ip)
         op_db_ovpn_client_status(op, cn, ip)
-        log(" executed done!****************************************************************\n")
+        log("executed done!")
+        log ("***************************************************************")
         exit(0)
     except Exception as e:
         print("Exception Occured: %s" % e)

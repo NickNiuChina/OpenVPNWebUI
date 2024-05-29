@@ -1,5 +1,5 @@
 from django import forms
-from .models import Servers
+from .models import Servers, ClientList
 
 
 class ServersForm(forms.ModelForm):
@@ -20,6 +20,22 @@ class ServersForm(forms.ModelForm):
             "management_port",
             "management_password",
             "comment"
+        ]
+        widgets = {
+          'comment': forms.Textarea(attrs={'rows': 2}),
+        }
+
+class ClientList(forms.ModelForm):
+    class Meta:
+        model = ClientList
+        fields = [
+            "server",
+            "cn",
+            "ip",
+            "toggle_time",
+            "enabled",
+            "status",
+            "expire_date",
         ]
         widgets = {
           'comment': forms.Textarea(attrs={'rows': 2}),

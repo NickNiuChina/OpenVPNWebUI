@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 import datetime
 import uuid
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import int_list_validator, validate_comma_separated_integer_list
 
 
 logger = logging.getLogger(__name__)
@@ -24,18 +25,18 @@ class LinkShowType(models.TextChoices):
 
 
 class Servers(models.Model):
-    """OpenVPN servers model"""
+    """OpenVPN servers model"""    
     STATUS_CHOICE = [(0, "disabled"), (1, "enabled")]
     STARTUP_CHOICE = [(0, "sysv"), (1, "systemd")]
     LOG_IZE_CHOICE = [(-1, -1), (300, 300), (1000, 1000), (3000, 3000)]
 
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     server_name = models.CharField(max_length=100, null=False, blank=False, unique=True)
-    configuration_dir = models.CharField(max_length=500, null=False, blank=False, unique=True)
-    configuration_file = models.CharField(max_length=500, null=False, blank=False)
-    status_file = models.CharField(max_length=500, null=True, blank=True)
-    log_file_dir = models.CharField(max_length=500, null=True, blank=True)
-    log_file = models.CharField(max_length=500, null=True, blank=True)
+    configuration_dir = models.CharField(max_length=200, null=False, blank=False, unique=True)
+    configuration_file = models.CharField(max_length=200, null=False, blank=False)
+    status_file = models.CharField(max_length=200, null=True, blank=True)
+    log_file_dir = models.CharField(max_length=200, null=True, blank=True)
+    log_file = models.CharField(max_length=200, null=True, blank=True)
     startup_type = models.IntegerField(choices=STARTUP_CHOICE, default=1)
     startup_service = models.CharField(max_length=200, null=False, blank=False)
     certs_dir = models.CharField(max_length=200, null=False, blank=False)
@@ -55,7 +56,7 @@ class Servers(models.Model):
 
 
 class ClientList(models.Model):
-    """OpenVPN servers model"""
+    """OpenVPN client model"""
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     server = models.ForeignKey(
         Servers,
@@ -75,3 +76,32 @@ class ClientList(models.Model):
     create_time = models.DateTimeField(_('creation time'), default=now)
     update_time = models.DateTimeField(_('modify time'), default=now)
 
+class ClientListConfig(models.Model):
+    """OpenVPN client proxy config model"""
+    validate_comma_separated_integer_list = int_list_validator(
+        message=_("Enter only digits separated by commas."),
+    )
+    OS_TYPE_CHOICE = [(0, "Linux"), (1, "Windows"), (2, "MacOS"), (3, "Others")]
+    PROXY_CHOICE = [(0, "disabled"), (1, "enabled")]
+    
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True)
+    ovpn_client = models.ForeignKey(
+        ClientList,
+        verbose_name=_('ovpn_client'),
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE)
+    os_type = models.IntegerField(choices=OS_TYPE_CHOICE, default=0)
+    http_proxy = models.IntegerField(choices=PROXY_CHOICE, default=0)
+    https_proxy = models.IntegerField(choices=PROXY_CHOICE, default=0)
+    http_port = models.CharField(validators=[validate_comma_separated_integer_list], max_length=200, null=True, blank=True)
+    https_port = models.CharField(validators=[validate_comma_separated_integer_list], max_length=200, null=True, blank=True)
+    http_proxy_template = models.TextField(max_length=2000, null=True, blank=True)
+    ssh_proxy = models.IntegerField(choices=PROXY_CHOICE, default=0)
+    ssh_proxy_port = models.IntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(22), MaxValueValidator(65536)]
+    )
+    create_time = models.DateTimeField(_('creation time'), default=now)
+    update_time = models.DateTimeField(_('modify time'), default=now)

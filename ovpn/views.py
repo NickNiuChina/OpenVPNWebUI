@@ -3,7 +3,7 @@ import subprocess
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Servers
+from .models import Servers, ClientList
 import platform
 import datetime
 from .forms import ServersForm
@@ -16,6 +16,14 @@ from utils.LogParser import LogParser
 
 
 def index(request):
+    """ Dashboard
+
+    Args:
+        request (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     system_type = platform.system()
     system_info = {
         "system_type": system_type,
@@ -65,6 +73,14 @@ def index(request):
 
 
 def servers(request):
+    """ Openvpn server list or post to add new server
+
+    Args:
+        request (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     servers = Servers.objects.all()
     form = ServersForm()
 
@@ -82,6 +98,14 @@ def servers(request):
 
 
 def server_delete(request):
+    """ Post to delete an Openvpn server
+
+    Args:
+        request (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     if request.method != 'POST':
         return HttpResponse("Page not found", status=404)
     else:
@@ -109,6 +133,15 @@ def server_delete(request):
 
 
 def server_update(request, sid):
+    """ OpenVPN server update
+
+    Args:
+        request (_type_): _description_
+        sid (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     server = get_object_or_404(Servers, id=sid)
 
     if request.method == 'GET':
@@ -179,6 +212,22 @@ def server_log(request, ovpn_service=None, log_file=None):
         messages.error(request, "Logfile does not exist!")
     return render(request, 'ovpn/server_log.html', context)
 
+def clients(request, ovpn_service=None):
+    ovpn_server = Servers.objects.filter(server_name=ovpn_service).first()
+    clients = ClientList.objects.filter(server=ovpn_server)
+    form = ServersForm()
+
+    if request.method == "POST":
+        formset = ServersForm(request.POST)
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, "New server has been added successfully!")
+        else:
+            messages.error(request, formset.errors)
+        form = ServersForm()
+        return render(request, 'ovpn/servers.html', {"servers": servers, "form": form})
+    else:
+        return render(request, 'ovpn/clients.html', {"clients": clients, "server": ovpn_server, "form": form})
 
 def users(request):
     return render(request, 'ovpn/users.html')
