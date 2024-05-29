@@ -32,4 +32,35 @@ system eanble --now openvpn-udp-tun-1194.service
 
 tail -f /var/log/openvpn/openvpn-udp-tun-1194.log
 ```
+5. Setup client
+```
+ls -al /etc/systemd/system/multi-user.target.wants/openvpn-client@client-openvpn-udp-tun-1194-test1.service
+lrwxrwxrwx 1 root root 43 May 29 13:14 /etc/systemd/system/multi-user.target.wants/openvpn-client@client-openvpn-udp-tun-1194-test1.service -> /lib/systemd/system/openvpn-client@.service
 
+nick@openvpn-test:~$ cat /etc/systemd/system/multi-user.target.wants/openvpn-client@client-openvpn-udp-tun-1194-test1.service
+[Unit]
+Description=OpenVPN tunnel for %I
+After=network-online.target
+Wants=network-online.target
+Documentation=man:openvpn(8)
+Documentation=https://community.openvpn.net/openvpn/wiki/Openvpn24ManPage
+Documentation=https://community.openvpn.net/openvpn/wiki/HOWTO
+
+[Service]
+Type=notify
+PrivateTmp=true
+WorkingDirectory=/etc/openvpn/client
+ExecStart=/usr/sbin/openvpn --daemon ovpn-%i --status /run/openvpn/%i.status 10 --cd /etc/openvpn/client --script-security 2 --config /etc/openvpn/client/%i.conf --writepid /run/openvpn/%i.pid
+CapabilityBoundingSet=CAP_IPC_LOCK CAP_NET_ADMIN CAP_NET_RAW CAP_SETGID CAP_SETUID CAP_SYS_CHROOT CAP_DAC_OVERRIDE
+LimitNPROC=10
+DeviceAllow=/dev/null rw
+DeviceAllow=/dev/net/tun rw
+ProtectSystem=true
+ProtectHome=true
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
+nick@openvpn-test:~$
+
+```
