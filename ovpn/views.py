@@ -20,7 +20,7 @@ def index(request):
     """ Dashboard
 
     Args:
-        request (get): get the dashboard page
+        request (django.http.request): django request object 
 
     Returns:
         template: template main.html with context of system informations
@@ -77,8 +77,7 @@ def servers(request):
     """ Openvpn server list or post to add new server
 
     Args:
-        request (get): get the server list page
-        request (post): submit form info to add or delete an openvpn serivce
+        request (django.http.request): django.http.request
 
     Returns:
         template: template ovpn/servers.html with context {servers, form}

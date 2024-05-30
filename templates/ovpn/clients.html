@@ -81,8 +81,8 @@
 							{% if clients %}
 							{% for client in clients %}
 								<tr>
-									<th>{{ client.id | truncatechars:"9" }}</th>
-									<th data-toggle="modal" data-target="#updateClientSiteName" style="color:blue;">{{ client.site_name | default_if_none:"NA"  }}</th>
+									<th>{{ client.id }}</th>
+									<th data-toggle="modal" data-target="" class="edit_site_name" style="color:blue;">{{ client.site_name | default_if_none:"NA"  }}</th>
 									<th> {{client.cn}}</th>
 									<th>{{client.ip}}</th>
 									<th>{{client.toggle_time | date:'Y-m-d_H:i:s'}}</th>
@@ -122,11 +122,12 @@
 							</button>
 						</div>
 						<div class="modal-body">
-							Are you sure to delete a OpenVPN service(This is irreversible)?
+							<div id="current_uuid"></div>
+							<div id="current_site_name"></div>
 							<div class="form-group hidden">
 								{% csrf_token %}
-								<label for="service_uuid" class="control-label">Insert OpenVPN service uuid:</label>
-								<input type="text" class="form-control" name="service_uuid" id="service_uuid" required>
+								<label for="newSiteName" class="control-label">Input the new site name</label>
+								<input type="text" class="form-control" name="newSiteName" id="newSiteName" required>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -143,20 +144,21 @@
 </div>
 
 {% endblock %}
+{% block page_js %}
 <script>
     $(document).ready(function(){
-        $('.editbtn').on('click', function(){
+        $('.edit_site_name').on('click', function(){
 
-            $('#editmodal').modal('show');
+            $('#updateClientSiteName').modal('show');
             $tr =$(this).closest('tr');
-            var data= $tr.children("td").map(function(){
+            var data= $tr.children("th").map(function(){
               return $(this).text();
             }).get();
 
-            console.log(data);
-            $('#title').val(data[0]);
-            $('#quantity').val(data[1]);
-            $('#size').val(data[2]);
+            // console.log(data);
+            $('#current_uuid').html("UUID: " + data[0]);
+            $('#current_site_name').html("SiteName: " + data[1]);
         });
     });
-  </script>
+</script>
+{% endblock %}
