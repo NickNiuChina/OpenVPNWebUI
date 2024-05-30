@@ -91,9 +91,9 @@ class ClientListConfig(models.Model):
         blank=False,
         null=False,
         on_delete=models.CASCADE)
-    os_type = models.IntegerField(choices=OS_TYPE_CHOICE, default=0)
-    http_proxy = models.IntegerField(choices=PROXY_CHOICE, default=0)
-    https_proxy = models.IntegerField(choices=PROXY_CHOICE, default=0)
+    os_type = models.IntegerField(choices=OS_TYPE_CHOICE, default=0, null=True, blank=True)
+    http_proxy = models.IntegerField(choices=PROXY_CHOICE, default=0, null=True, blank=True)
+    https_proxy = models.IntegerField(choices=PROXY_CHOICE, default=0, null=True, blank=True)
     http_port = models.CharField(validators=[validate_comma_separated_integer_list], max_length=200, null=True, blank=True)
     https_port = models.CharField(validators=[validate_comma_separated_integer_list], max_length=200, null=True, blank=True)
     http_proxy_template = models.TextField(max_length=2000, null=True, blank=True)
