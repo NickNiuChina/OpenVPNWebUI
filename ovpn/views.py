@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Servers, ClientList
+from users.models import User
 import platform
 import datetime
 from .forms import ServersForm
@@ -19,10 +20,10 @@ def index(request):
     """ Dashboard
 
     Args:
-        request (_type_): _description_
+        request (get): get the dashboard page
 
     Returns:
-        _type_: _description_
+        template: template main.html with context of system informations
     """
     system_type = platform.system()
     system_info = {
@@ -76,14 +77,14 @@ def servers(request):
     """ Openvpn server list or post to add new server
 
     Args:
-        request (_type_): _description_
+        request (get): get the server list page
+        request (post): submit form info to add or delete an openvpn serivce
 
     Returns:
-        _type_: _description_
+        template: template ovpn/servers.html with context {servers, form}
     """
     servers = Servers.objects.all()
-    form = ServersForm()
-
+    form = ServersForm()    
     if request.method == "POST":
         formset = ServersForm(request.POST)
         if formset.is_valid():
@@ -101,15 +102,15 @@ def server_delete(request):
     """ Post to delete an Openvpn server
 
     Args:
-        request (_type_): _description_
+        request (post): uuid: openvpn service id
 
     Returns:
-        _type_: _description_
+        redirect: redirect("ovpn:servers")
     """
     if request.method != 'POST':
         return HttpResponse("Page not found", status=404)
     else:
-        service_uuid = request.POST.get('service_uuid')
+        service_uuid = request.POST.get('service_uuid').strip()
         if uuid:
             try:
                 sid = uuid.UUID(service_uuid)
@@ -161,6 +162,15 @@ def server_update(request, sid):
 
 
 def server_logs(request, ovpn_service=None):
+    """_summary_
+
+    Args:
+        request (_type_): _description_
+        ovpn_service (_type_, optional): _description_. Defaults to None.
+
+    Returns:
+        _type_: _description_
+    """
     ovpn_service = get_object_or_404(Servers, server_name=ovpn_service)
     context = {}
     ovpn_logs = []
@@ -188,22 +198,37 @@ def server_logs(request, ovpn_service=None):
 
 
 def server_log(request, ovpn_service=None, log_file=None):
+    """_summary_
+
+    Args:
+        request (_type_): _description_
+        ovpn_service (_type_, optional): _description_. Defaults to None.
+        log_file (_type_, optional): _description_. Defaults to None.
+
+    Returns:
+        _type_: _description_
+    """
     ovpn_service = get_object_or_404(Servers, server_name=ovpn_service)
+    authenticated = request.session.get("authenticated")
+    user_id = authenticated['id']
+    user = User.objects.filter(id=user_id).first()
+    # print(user.log_size)
+    
     # form to update 
     if request.method == "POST":
         new_size = int(request.POST.get("log_size"))
-        if ovpn_service.log_size == new_size:
+        if user.log_size == new_size:
             messages.warning(request, "You did not submit a new value!")
         else:
-            ovpn_service.log_size = new_size
-            ovpn_service.save()
+            user.log_size = new_size
+            user.save()
             messages.success(request, "Log lines has been update successfully!")
         return redirect('ovpn:server_log', ovpn_service=ovpn_service.server_name, log_file=log_file)
     
     context = {}
     
     logs_file_dir = pathlib.Path(ovpn_service.log_file_dir, log_file)
-    log_size = int(ovpn_service.log_size)
+    log_size = int(user.log_size)
     context.update({"log_size": log_size, "ovpn_service": ovpn_service, "log_file": log_file})
     if logs_file_dir.is_file():
         log_content = LogParser.read_log(log_size, logs_file_dir)
@@ -213,6 +238,15 @@ def server_log(request, ovpn_service=None, log_file=None):
     return render(request, 'ovpn/server_log.html', context)
 
 def clients(request, ovpn_service=None):
+    """_summary_
+
+    Args:
+        request (_type_): _description_
+        ovpn_service (_type_, optional): _description_. Defaults to None.
+
+    Returns:
+        _type_: _description_
+    """
     ovpn_server = Servers.objects.filter(server_name=ovpn_service).first()
     clients = ClientList.objects.filter(server=ovpn_server)
     form = ServersForm()
@@ -230,10 +264,26 @@ def clients(request, ovpn_service=None):
         return render(request, 'ovpn/clients.html', {"clients": clients, "server": ovpn_server, "form": form})
 
 def users(request):
+    """ APP user list
+
+    Args:
+        request (get): django request object 
+
+    Returns:
+        tempalate: tempate ovpn/users.html
+    """
     return render(request, 'ovpn/users.html')
 
 
 def show_settings(request):
+    """List Django setting values
+
+    Args:
+        request (get): django request object
+
+    Returns:
+        HttpResponse: settings key/value(s)
+    """
     res = ''
     from django.conf import settings
     for name in dir(settings):
@@ -246,6 +296,14 @@ def show_settings(request):
 
 
 def show_sessions(request):
+    """ List django session values
+
+    Args:
+        request (get): django request object
+
+    Returns:
+        HttpResponse: session key/value(s)
+    """
     res = ''
     for key, value in request.session.items():
         res += '</br>'

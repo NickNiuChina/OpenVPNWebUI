@@ -66,7 +66,7 @@
 								<tr>
 									<th>OpenVPN service UUID</th>
 									<th>Service</th>
-									<th>cmd</th>
+									<th>startup</th>
 									<th>status</th>
 									<th>configuration dir</th>
 									<th>Running status</th>
@@ -79,7 +79,7 @@
 								<tr>
 									<th>{{ server.id }}</th>
 									<th> {{server.server_name}}</th>
-									<th>{{server.service_cmd}}</th>
+									<th>{{server.startup_service}}</th>
 									<th>
 										{% if server.managed == 1 %}
 											managed
