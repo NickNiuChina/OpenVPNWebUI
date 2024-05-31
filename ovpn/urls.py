@@ -21,7 +21,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name="index"),
-    path('users', views.users, name='users'),
+    
     path('servers', views.servers, name='servers'),
     path('servers/delete', views.server_delete, name='server_delete'),
     path('servers/update/<uuid:sid>/', views.server_update, name='server_update'),

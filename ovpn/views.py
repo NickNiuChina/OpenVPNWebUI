@@ -101,7 +101,8 @@ def server_delete(request):
     """ Post to delete an Openvpn server
 
     Args:
-        request (post): uuid: openvpn service id
+        request (django.http.request): 
+        uuid: openvpn service id
 
     Returns:
         redirect: redirect("ovpn:servers")
@@ -240,8 +241,8 @@ def clients(request, ovpn_service=None):
     """_summary_
 
     Args:
-        request (_type_): _description_
-        ovpn_service (_type_, optional): _description_. Defaults to None.
+        request (django.http.request): django.http.request
+        ovpn_service (str, optional): the openvpn service name. Defaults to None.
 
     Returns:
         _type_: _description_
@@ -261,17 +262,6 @@ def clients(request, ovpn_service=None):
         return render(request, 'ovpn/servers.html', {"servers": servers, "form": form})
     else:
         return render(request, 'ovpn/clients.html', {"clients": clients, "server": ovpn_server, "form": form})
-
-def users(request):
-    """ APP user list
-
-    Args:
-        request (get): django request object 
-
-    Returns:
-        tempalate: tempate ovpn/users.html
-    """
-    return render(request, 'ovpn/users.html')
 
 
 def show_settings(request):

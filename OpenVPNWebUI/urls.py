@@ -22,7 +22,9 @@ urlpatterns = [
     path('', views.redirect_index, name='index'),
     path('admin/', admin.site.urls),
     path('auth/', include(("authentication.urls", 'authentication'), "auth")),
-    path('ovpn/', include(('ovpn.urls', "ovpn"), namespace="ovpn"))
+    path('ovpn/', include(('ovpn.urls', "ovpn"), namespace="ovpn")),
+    path('users/', include(('users.urls', "users"), namespace="users"))
+    
 ]
 
 handler404 = 'OpenVPNWebUI.views.handler404'
