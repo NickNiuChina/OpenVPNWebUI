@@ -782,24 +782,6 @@ $(document).ready(function() {
     });
     **/
 
-    // $('#clientStatusModal').on('shown.bs.modal',
-    //     function(e) {
-    //         storename = $(e.relatedTarget).parent().parent().children(".dtr-control").text();
-    //         cn = $(e.relatedTarget).parent().parent().children(".dtr-control").next().text();
-    //         var thismodal = $('#clientStatusModal');
-    //         thismodal.find('.modal-body').html("<p>storename: " + storename + "</p><p>cn: " + cn + "</p>");
-    //         $(this).on('click', '.btn-primary', { 'filename': cn }, function(e) {
-    //             var newstorename = thismodal.find('input').val();
-    //             console.log("newstorename:" + newstorename);
-    //             if (newstorename) {
-    //                 $.post("service/clientstatus/update", { 'cn': cn, 'newstorename': newstorename }, function(result) {
-    //                     $('#tbclientstatus').DataTable().ajax.reload(); // reload table data
-    //                     $('#clientStatusModal').modal('hide'); // hide modal
-    //                 });
-    //             }
-    //         });
-
-    //     });
 
     $(document).on('click', '#changeStatus', function(e) {
         // storename = $(e.relatedTarget).parent().parent().children(".dtr-control").text();
@@ -875,32 +857,32 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     function createEditor(name, size, theme, mode, readonly) {
-      // find the textarea
-      var textarea = document.querySelector("form textarea[name=" + name + "]");
+        // find the textarea
+        var textarea = document.querySelector("form textarea[name=" + name + "]");
 
-      // create ace editor
-      var editor = ace.edit()
-      editor.container.style.height = size
+        // create ace editor
+        var editor = ace.edit()
+        editor.container.style.height = size
 
-      editor.setTheme("ace/theme/" + theme); //"clouds_midnight"
-      //editor.setTheme("ace/theme/twilight");
-      //editor.setTheme("ace/theme/iplastic");
+        editor.setTheme("ace/theme/" + theme); //"clouds_midnight"
+        //editor.setTheme("ace/theme/twilight");
+        //editor.setTheme("ace/theme/iplastic");
 
-      editor.session.setMode("ace/mode/" + mode);
+        editor.session.setMode("ace/mode/" + mode);
 
-      editor.setReadOnly(readonly);
-      editor.setShowPrintMargin(false);
-      editor.session.setUseWrapMode(true);
-      editor.session.setValue(textarea.value)
-      // replace textarea with ace
-      textarea.parentNode.insertBefore(editor.container, textarea)
-      textarea.style.display = "none"
-      // find the parent form and add submit event listener
-      var form = textarea
-      while (form && form.localName != "form") form = form.parentNode
-      form.addEventListener("submit", function() {
-          // update value of textarea to match value in ace
-          textarea.value = editor.getValue()
-      }, true)
+        editor.setReadOnly(readonly);
+        editor.setShowPrintMargin(false);
+        editor.session.setUseWrapMode(true);
+        editor.session.setValue(textarea.value)
+            // replace textarea with ace
+        textarea.parentNode.insertBefore(editor.container, textarea)
+        textarea.style.display = "none"
+            // find the parent form and add submit event listener
+        var form = textarea
+        while (form && form.localName != "form") form = form.parentNode
+        form.addEventListener("submit", function() {
+            // update value of textarea to match value in ace
+            textarea.value = editor.getValue()
+        }, true)
     };
 });

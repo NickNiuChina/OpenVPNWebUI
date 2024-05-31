@@ -114,7 +114,7 @@
 			aria-labelledby="myModalLabel">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
-					<form action="{% url 'ovpn:server_delete' %}" method="post">
+					<form action="" method="post">
 						<div class="modal-header">
 							<h4 class="modal-title" id="udpate-myModalLabel">Update Site Name</h4>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -126,6 +126,10 @@
 							<div id="current_site_name"></div>
 							<div class="form-group hidden">
 								{% csrf_token %}
+								<label for="client_uuid" class="control-label">client uuid</label>
+								<input type="text" class="form-control" name="client_uuid" id="client_uuid" readonly>
+								<label for="client_old_name" class="control-label">client current name</label>
+								<input type="text" class="form-control" name="client_old_name" id="client_old_name" readonly>
 								<label for="newSiteName" class="control-label">Input the new site name</label>
 								<input type="text" class="form-control" name="newSiteName" id="newSiteName" required>
 							</div>
@@ -156,8 +160,8 @@
             }).get();
 
             // console.log(data);
-            $('#current_uuid').html("UUID: " + data[0]);
-            $('#current_site_name').html("SiteName: " + data[1]);
+            $('#client_uuid').val(data[0]);
+            $('#client_old_name').val(data[1]);
         });
     });
 </script>

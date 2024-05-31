@@ -252,14 +252,23 @@ def clients(request, ovpn_service=None):
     form = ServersForm()
 
     if request.method == "POST":
-        formset = ServersForm(request.POST)
-        if formset.is_valid():
-            formset.save()
-            messages.success(request, "New server has been added successfully!")
+        client_uuid = request.POST.get('client_uuid', '')
+        new_site_name = request.POST.get('newSiteName', '')
+        site_name = ""
+        if new_site_name and new_site_name.strip():
+            site_name = new_site_name
+        
+        if site_name:
+            client = ClientList.objects.filter(id=client_uuid).first()
+            if client:
+                client.site_name = site_name
+                client.save()
+                messages.success(request, "Client site_name has been updated successfully.")
+            else:
+                messages.error(request, "UUID is not in correct client uuid!")
         else:
-            messages.error(request, formset.errors)
-        form = ServersForm()
-        return render(request, 'ovpn/servers.html', {"servers": servers, "form": form})
+            messages.error(request, "Please provide a valid site name!")    
+        return redirect("ovpn:clients", ovpn_service=ovpn_server.server_name)
     else:
         return render(request, 'ovpn/clients.html', {"clients": clients, "server": ovpn_server, "form": form})
 
