@@ -140,3 +140,34 @@ c = ClientList(server=s, cn="nick-test2", ip="2.2.2.2")
 c = ClientList(server=s, cn="nick-test3", ip="3.3.3.3")
 c.save()
 ```
+
+o.
+
+datatables pagelength
+```
+$(document).ready(function() {
+    $('#example').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "ajax": {
+            "url": "your-server-side-script.php", // 服务器端脚本URL
+            "type": "POST"
+        },
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]], // 这里可以设置一个默认的分页长度选项
+        "pageLength": -1, // 默认显示所有数据，直到用户手动改变
+        "initComplete": function(settings, json) {
+            var defaultPageLength = yourDatabaseFetchedValue; // 从数据库获取的默认分页长度值
+            this.api().columns().every(function() {
+                var column = this;
+                if (column.index() == 0) { // 假设我们是根据第一列来设置分页长度
+                    column.data().unique().sort().each(function(d, j) {
+                        var pageLength = defaultPageLength; // 使用从数据库获取的值
+                        var option = '<option value="' + pageLength + '">' + pageLength + '</option>';
+                        $('#example_length').append(option); // 添加到选择框中
+                    });
+                }
+            });
+        }
+    });
+});
+```

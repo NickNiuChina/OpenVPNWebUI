@@ -1,10 +1,10 @@
 import subprocess
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Servers, ClientList
-from users.models import User
+from users.models import User, UserGroup
 import platform
 import datetime
 from .forms import ServersForm
@@ -14,6 +14,7 @@ import time
 import pathlib
 from utils.OpenVPNParser import OpenVPNParser
 from utils.LogParser import LogParser
+from django.db.models import Q, CharField, Value
 
 
 def index(request):
@@ -211,7 +212,7 @@ def server_log(request, ovpn_service=None, log_file=None):
     ovpn_service = get_object_or_404(Servers, server_name=ovpn_service)
     authenticated = request.session.get("authenticated")
     user_id = authenticated['id']
-    user = User.objects.filter(id=user_id).first()
+    user = User.objects.get(id=user_id)
     # print(user.log_size)
     
     # form to update 
@@ -237,40 +238,92 @@ def server_log(request, ovpn_service=None, log_file=None):
         messages.error(request, "Logfile does not exist!")
     return render(request, 'ovpn/server_log.html', context)
 
+
 def clients(request, ovpn_service=None):
-    """_summary_
+    """ OpenPVN client page also accept POST request
 
     Args:
         request (django.http.request): django.http.request
-        ovpn_service (str, optional): the openvpn service name. Defaults to None.
+        ovpn_service (str, optional): the openvpn service name. Defaults to None will return 404.
+        action (str, ["list", "update_site_name"]):
+            "list": this request from ajax to retrieve client list
+            "update_site_name": from client page to update site_name
 
     Returns:
-        _type_: _description_
+        JsonResponse: this response to ajax
+        redirect: redirect client page for post request
+        tempate: get request and return template
     """
-    ovpn_server = Servers.objects.filter(server_name=ovpn_service).first()
+    ovpn_server = Servers.objects.get(server_name=ovpn_service)
     clients = ClientList.objects.filter(server=ovpn_server)
-    form = ServersForm()
+    authenticated = request.session.get("authenticated")
+    user_id = authenticated['id']
+    user = User.objects.get(id=user_id)   
+    group = user.group.name
+    context = {"clients": clients, "server": ovpn_server, "user": user}
 
     if request.method == "POST":
-        client_uuid = request.POST.get('client_uuid', '')
-        new_site_name = request.POST.get('newSiteName', '')
-        site_name = ""
-        if new_site_name and new_site_name.strip():
-            site_name = new_site_name
-        
-        if site_name:
-            client = ClientList.objects.filter(id=client_uuid).first()
-            if client:
-                client.site_name = site_name
-                client.save()
-                messages.success(request, "Client site_name has been updated successfully.")
+        # return json to datatables
+        if request.POST.get('action', '') == "list":
+            draw = request.POST.get('draw')
+            start = request.POST.get('start')
+            length = request.POST.get('length')
+            searchValue = request.POST.get('search[value]')
+            order_col = request.POST.get("order[0][column]")
+            order_direction = request.POST.get("order[0][dir]")
+            # print(draw, start, length, searchValue, order_col, order_direction)
+            # 7 0 50  0 asc
+            
+            results = ClientList.objects.filter(server=ovpn_server)
+            recordsTotal = len(results)
+            if searchValue and searchValue.strip():
+                query = searchValue.strip()
+                lookups= Q(id__icontains=query) | Q(site_name__icontains=query) | Q(cn__icontains=query) | Q(ip__icontains=query)
+                # results =results.filter(lookups).distinct()
+                results =ClientList.objects.annotate(foo=Value(query, CharField())).filter(lookups).distinct()
+                recordsFiltered = len(results)
             else:
-                messages.error(request, "UUID is not in correct client uuid!")
-        else:
-            messages.error(request, "Please provide a valid site name!")    
-        return redirect("ovpn:clients", ovpn_service=ovpn_server.server_name)
+                results = results
+                recordsFiltered = len(results)
+
+            columns = ['id', 'site_name', 'cn', 'ip', "toggle_time", "status"]
+            col = columns[int(order_col)]
+            if order_direction == "asc":
+                results = results.order_by(col)[int(start):int(length)]
+            else:
+                results = results.order_by('-' + col)[int(start):int(length)]
+                       
+            data = {
+                'recordsFiltered': recordsFiltered,
+                'recordsTotal': recordsTotal,
+                'draw': draw,
+                'data': [ d for d in results.values() ],
+                "privs_group": group,
+                'pageLength': user.page_size
+            }
+            return JsonResponse(data)
+        # operate for site name changing
+        elif request.POST.get('action', '') == "update_site_name":
+            client_cn = request.POST.get('client_cn', '')
+            new_site_name = request.POST.get('newSiteName', '')
+            site_name = ""
+            if new_site_name and new_site_name.strip():
+                site_name = new_site_name
+            
+            if site_name:
+                client = ClientList.objects.filter(server=ovpn_server).get(cn=client_cn)
+                if client:
+                    client.site_name = site_name
+                    client.save()
+                    messages.success(request, "Client site_name has been updated successfully.")
+                else:
+                    messages.error(request, "cn is not correct!")
+            else:
+                messages.error(request, "Please provide a valid site name!")    
+            return redirect("ovpn:clients", ovpn_service=ovpn_server.server_name)
+    # get request
     else:
-        return render(request, 'ovpn/clients.html', {"clients": clients, "server": ovpn_server, "form": form})
+        return render(request, 'ovpn/clients.html', context)
 
 
 def show_settings(request):
