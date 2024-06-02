@@ -57,25 +57,45 @@
 			    </div> {# /.card-header #}
 			    <div class="card-body">
 					<div class="table-responsive">
-						<table id="tb_users_list" class="table table-striped table-bordered table-hover">
+						<table id="tb_users" class="table table-striped table-bordered table-hover">
 							<thead>
 								<tr>
-									<th>#</th>
+									<th>UUID</th>
 									<th>Username</th>
-									<th>Priv</th>
-									<th>DisplayName</th>
-									<th>Status</th>
+									<th>Name</th>
+									<th>Email</th>
+									<th>group</th>
+									<th>Log size</th>
+									<th>Page size</th>
 									<th>Operation</th>
 								</tr>
 							</thead>
 							<tbody>
+							{% if users %}
+							{% for user in users %}
+								<tr>
+									<th>{{ user.id }}</th>
+									<th> {{user.username}}</th>
+									<th>{{user.name}}</th>
+									<th>{{user.email }}</th>
+									<th>{{user.group}}</th>
+									<th>{{ user.log_size }}</th>
+									<th>{{ user.page_size }}</th>
+									<th>
+										<a href="{% url 'users:users' %}" class="btn btn-primary">Edit</a>
+									</th>
+								</tr>
+							{%  endfor %}
+							{% endif %}
 							<tfoot>
 								<tr>
-									<th>#</th>
+									<th>UUID</th>
 									<th>Username</th>
-									<th>Priv</th>
-									<th>DisplayName</th>
-									<th>Status</th>
+									<th>Name</th>
+									<th>Email</th>
+									<th>group</th>
+									<th>Log size</th>
+									<th>Page size</th>
 									<th>Operation</th>
 								</tr>
 							</tfoot>

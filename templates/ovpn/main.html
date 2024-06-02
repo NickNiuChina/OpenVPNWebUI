@@ -188,11 +188,16 @@
 </div>
 
 <script type="text/javascript">
+
 	function reload() {
-	  document.location.reload();
+		// document.location.reload();
+		var v = 1;
+		var today = new Date();
+		var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+		console.log(time);
 	}
 
-	setTimeout(reload, 30000);
+	setInterval(reload, 1000);
 </script>
 {% endblock %}
 

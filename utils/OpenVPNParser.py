@@ -5,22 +5,22 @@ import platform
 class OpenVPNParser(object):
     @classmethod
     def get_openvpn_version(cls, executor=None) -> str:
-        if not platform.system().startswith("linux"):
+        if not platform.system().startswith("Linux"):
             return ""
-                    
-        if not executor:
-            p = subprocess.Popen(["openvpn", '--version'],
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 shell=False)
-            output = p.stdout.readlines()[0].decode("utf-8")
-            lout = output.split()[0:3]
-            version = "-".join(str(x) for x in lout)
-            if version:
-                return version
+        try:            
+            if not executor:
+                res = subprocess.run(["openvpn", '--version'], capture_output = True, shell=False)
+                output = res.stdout.decode("utf-8")
+                lout = output.split("\n")[0]
+                version = "-".join(str(x) for x in lout.split()[0:3])
+                if version:
+                    return version
+                else:
+                    return ""
             else:
                 return ""
-        return ""
+        except:
+            return ""
 
 
     @classmethod
@@ -56,4 +56,7 @@ class OpenVPNParser(object):
             except:
                 results.update({"status": 0})
                 return results
-    
+
+if __name__ == "__main__":
+    print("OpenVPN version: " + OpenVPNParser.get_openvpn_version())
+
