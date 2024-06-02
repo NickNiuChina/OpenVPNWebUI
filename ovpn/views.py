@@ -84,6 +84,17 @@ def servers(request):
         template: template ovpn/servers.html with context {servers, form}
     """
     servers = Servers.objects.all()
+    return_servers = []
+    for server in servers:
+        if not platform.system().startswith("Linux"):
+            server.running_status = 0
+        else:            
+            status = OpenVPNParser.get_openvpn_running_status(server)
+            if status:
+                server.running_status = status["status"]
+            else:
+                server.running_status = 0
+        return_servers.append(server)
     form = ServersForm()    
     if request.method == "POST":
         formset = ServersForm(request.POST)
@@ -95,7 +106,7 @@ def servers(request):
         form = ServersForm()
         return render(request, 'ovpn/servers.html', {"servers": servers, "form": form})
     else:
-        return render(request, 'ovpn/servers.html', {"servers": servers, "form": form})
+        return render(request, 'ovpn/servers.html', {"servers": return_servers, "form": form})
 
 
 def server_delete(request):

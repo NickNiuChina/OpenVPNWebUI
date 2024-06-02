@@ -88,7 +88,12 @@
 										{% endif %}
 									</th>
 									<th>{{server.configuration_dir}}</th>
-									<th>TOBE</th>
+									<th>
+									{% if server.running_status == 1 %}
+										<i class="fa fa-circle text-green"></i>
+									{% else %}
+										<i class="fa fa-circle text-red"></i>
+									{% endif %}
 									<th>
 										<a href="{% url 'ovpn:server_update' server.id %}" class="btn btn-primary">Edit</a>
 									</th>
