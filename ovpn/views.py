@@ -71,6 +71,9 @@ def index(request):
         }
     )
     context = {'system_info': system_info}
+    if request.method == "POST":
+        if request.POST.get('action', '') == "db_refresh":
+            return JsonResponse(context)
     return render(request, 'ovpn/main.html', context)
 
 

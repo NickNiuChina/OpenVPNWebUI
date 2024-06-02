@@ -46,10 +46,10 @@
 					<h3>OS </h3>
 					<div class="info-box-content">
 					  <span class="info-box-text">
-						<span class="info-box-number2">{{ system_info.system_type }}</span>
+						<span class="info-box-number2" id="db_system_type">{{ system_info.system_type }}</span>
 					  </span><br>
 					  <span class="info-box-text">
-						<span class="info-box-number2"> {{ system_info.system_version }} </span>
+						<span class="info-box-number2" id="db_system_version"> {{ system_info.system_version }} </span>
 					  </span>
 					</div>
 				  </div>
@@ -65,14 +65,14 @@
 					<h3>Load Average<sup style="font-size: 20px"></sup></h3>
 					<div class="info-box-content">
 					  <span class="info-box-text">
-						CPU count: <span class="info-box-number2">
+						CPU count: <span class="info-box-number2" id="db_cpu_cores">
 						{{system_info.cpu_cores}}
 						</span>
 					  </span><br>
 					  <span class="info-box-number">
-						1m: <b>{{ system_info.load_avg.0 | floatformat:2 }}</b> &nbsp; &nbsp;
-						5m: <b>{{ system_info.load_avg.1 | floatformat:2 }}</b> &nbsp; &nbsp;
-						15m: <b>{{ system_info.load_avg.2 | floatformat:2 }}</b><br/>
+						1m: <b  id="db_load_avg0">{{ system_info.load_avg.0 | floatformat:2 }}</b> &nbsp; &nbsp;
+						5m: <b id="db_load_avg1">{{ system_info.load_avg.1 | floatformat:2 }}</b> &nbsp; &nbsp;
+						15m: <b id="db_load_avg2">{{ system_info.load_avg.2 | floatformat:2 }}</b><br/>
 					  </span>
 					</div>
 				  </div>
@@ -86,7 +86,7 @@
 				<div class="small-box shadow" style="background-color:#ffc107; color: white;">
 				  <div class="inner">
 					<h3>OS uptime</h3>
-					<span class="info-box-number">{{system_info.system_uptime}}</span><br/><br/>
+					<span class="info-box-number" id="db_system_uptime">{{system_info.system_uptime}}</span><br/><br/>
 				  </div>
 				  <div class="icon">
 					<i class="ion ion-md-trending-up"></i>
@@ -98,7 +98,7 @@
 				<div class="small-box shadow" style="background-color: #e83e8c; color: white;">
 				  <div class="inner">
 					<h3>Server Time</h3>
-					<span class="info-box-number">
+					<span class="info-box-number" id="db_system_time">
 					  {{system_info.system_time}}
 					</span><br/><br/>
 				  </div>
@@ -119,7 +119,7 @@
 				<div class="card">
 				  <div class="card-body">
 					<div class="progress-group">
-					  <span class="progress-number">
+					  <span class="progress-number" id="db_memory">
 						Memory <b>{{ system_info.memory_used }}</b>
 						/
 						{{ system_info.memory_total }}
@@ -139,7 +139,7 @@
 				<div class="card">
 				  <div class="card-body">
 					<div class="progress-group">
-					  <span class="progress-number">
+					  <span class="progress-number" id="db_swap">
 						Swap <b>{{ system_info.swap_used }}</b>
 						/
 						{{ system_info.swap_total }} MB
@@ -166,7 +166,7 @@
 				  <!--i class="fa fa-info fa-2x"></i></span-->
 				<div class="info-box-content">
 				  <span class="info-box-text">OpenVPN version:</span>
-				  <span class="info-box-number3">{{system_info.openvpn_version}}</span>
+				  <span class="info-box-number3" id="ds_openvpn_version">{{system_info.openvpn_version}}</span>
 				</div>
 			  </div>
 			</div>
@@ -177,7 +177,7 @@
 					<i class="fa fa-gears fa-2x"></i></span>
 				<div class="info-box-content">
 				  <span class="info-box-text">Operating system:</span>
-				  <span class="info-box-number3">{{ system_info.system_information }}</span>
+				  <span class="info-box-number3" id="ds_system_information">{{ system_info.system_information }}</span>
 				</div>
 			  </div>
 			</div>
@@ -186,18 +186,13 @@
 		</div><!-- /.container-fluid -->
   	</section>
 </div>
+{% endblock %}
 
-<script type="text/javascript">
-
-	function reload() {
-		// document.location.reload();
-		var v = 1;
-		var today = new Date();
-		var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-		console.log(time);
-	}
-
-	setInterval(reload, 1000);
+{% block page_js %}
+{# dashboard refresh resources #}
+<script type="text/javascript" src="{% static 'js/dashboard_refresh.js' %}"></script>
+<script>
+	window.csrftoken="{{ csrf_token }}";
 </script>
 {% endblock %}
 

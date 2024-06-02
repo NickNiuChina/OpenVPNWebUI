@@ -14,3 +14,8 @@ class UserForm(forms.ModelForm):
             "log_size",
             "page_size"                   
         ]
+        
+        widgets = {
+            # telling Django your password field in the mode is a password input on the template
+            'password': forms.PasswordInput() 
+        }

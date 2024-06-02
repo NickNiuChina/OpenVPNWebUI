@@ -110,9 +110,9 @@
 		<div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
-					<form action="{% url 'ovpn:index' %}" method="post">
+					<form action="{% url 'users:users' %}" method="post">
 						<div class="modal-header">
-							<h4 class="modal-title" id="myModalLabel">Add User</h4>
+							<h4 class="modal-title" id="myModalLabel">Add OpenVPN service</h4>
 							<button type="button" class="close" data-dismiss="modal"
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
@@ -121,7 +121,7 @@
 						<div class="modal-body">
 
 							<div class="form-group"></div>
-
+							<!--
 							<div class="form-group">
 								<label for="user-username" class="control-label">Username:</label>
 								<input type="text" class="form-control" name="username" id="user-username" required
@@ -149,12 +149,13 @@
 								<input type="text" class="form-control" name="display-name" id="user-display-name" required
 								oninvalid="this.setCustomValidity('Please Enter valid dispalay name')"
                        			oninput="setCustomValidity('')">
-							</div>
-
+							</div> -->
+							{% csrf_token %}
+							{{ form }}
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-							<button type="submit" class="btn btn-primary">提交</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Concel</button>
+							<button type="submit" class="btn btn-primary">Confirm</button>
 						</div>
 					</form>
 				</div>
