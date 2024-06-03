@@ -86,7 +86,7 @@
 									<th>{{ user.log_size }}</th>
 									<th>{{ user.page_size }}</th>
 									<th>
-										<a href="{% url 'users:users' %}" class="btn btn-primary">Edit</a>
+										<a href="{% url 'users:user_update' sid=user.id %}" class="btn btn-primary">Edit</a>
 									</th>
 								</tr>
 							{%  endfor %}
@@ -161,7 +161,7 @@
 				<div class="modal-content">
 					<form action="{% url 'ovpn:index' %}" method="post">
 						<div class="modal-header">
-							<h4 class="modal-title" id="udpate-myModalLabel">更新用户信息</h4>
+							<h4 class="modal-title" id="udpate-myModalLabel">Update user info</h4>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>

@@ -85,19 +85,18 @@ def user_update(request, sid=None):
     Returns:
         _type_: _description_
     """
-    server = get_object_or_404(Servers, id=sid)
-
+    user = get_object_or_404(User, id=sid)
     if request.method == 'GET':
-        context = {'form': ServersForm(instance=server), 'id': sid}
-        return render(request, 'ovpn/server_update.html', context)
-
+        form = UserForm(instance=user)
+        context = {'form': form, 'id': sid}
+        return render(request, 'auth/user_update.html', context)
     elif request.method == 'POST':
-        form = ServersForm(request.POST, instance=server)
+        form = UserForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'The service has been updated successfully.')
-            return redirect('ovpn:servers')
+            messages.success(request, 'The user has been updated successfully.')
+            return redirect('users:users')
         else:
             messages.error(request, 'Please correct the following errors: ' + str(form.errors))
-            context = {'form': ServersForm(instance=server), 'id': sid}
-            return render(request, 'ovpn/server_update.html', context)
+            context = {'form': UserForm(instance=user), 'id': sid}
+            return render(request, 'user/user_update.html', context)

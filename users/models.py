@@ -5,8 +5,9 @@ from django.contrib.auth.hashers import make_password
 
 
 class User(models.Model):
-    LOG_SIZE_CHOICE = [(-1, -1), (300, 300), (1000, 1000), (3000, 3000)]
-    PAGE_SIZE_CHOICE = [(-1, -1), (50, 50), (100, 100), (200, 200), (500, 500)]
+    LOG_SIZE_CHOICE = [(-1, "All"), (300, 300), (1000, 1000), (3000, 3000)]
+    PAGE_SIZE_CHOICE = [(-1, "All"), (50, 50), (100, 100), (200, 200), (500, 500)]
+    ENABLED_CHOICE = [(1, "Enabled"), (0, "Disabled")]
     
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     username = models.CharField(max_length=128, unique=True, verbose_name=_('Username'))
@@ -20,6 +21,7 @@ class User(models.Model):
         blank=False,
         verbose_name=_('User group')
     )
+    status = models.IntegerField(choices=ENABLED_CHOICE, default=1, db_comment="User if enabled")
     log_size = models.IntegerField(choices=LOG_SIZE_CHOICE, default=300)
     page_size = models.IntegerField(choices=PAGE_SIZE_CHOICE, default=50)
     

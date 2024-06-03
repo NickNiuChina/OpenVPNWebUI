@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}User update{% endblock %}
+{% block content %}
+
+{# Content Wrapper. Contains page content #}
+<div class="content-wrapper">
+
+	{# Content Header (Page header) #}
+	<div class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1 class="m-0">OpenVPN services management</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="{% url 'ovpn:index' %}">Home</a></li>
+						<li class="breadcrumb-item active">Main</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+	{#  content-header END #}
+
+	<section class="content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+					{% if messages %}
+						<ul class="flashes">
+						{% for message in messages %}
+							<div class="text-{{ message.tags }}">
+								{{ message }}
+							</div>
+					{% endfor %}
+						</ul>
+					{% endif %}
+
+				</div>
+			</div>
+
+		{# update OpenVPN service #}
+		<div class="col-md-6 mx-auto">
+			<div class="card card-primary">
+				<div class="card-header">
+					<h3 class="card-title">Update user</h3>
+				</div>
+			
+				<div class="card-body">
+				<form method="post">
+					{% csrf_token %}
+					{{ form.as_p }}
+					<a href="{% url 'users:users' %}" class="btn btn-secondary">Cancel and Return</a>
+					<input type="submit" class="btn btn-primary float-right" value="Submit">
+				</form>
+				</div>
+			</div>
+
+		</div>
+	</section>
+</div>
+
+{% endblock %}
+
