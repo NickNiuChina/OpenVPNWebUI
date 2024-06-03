@@ -74,6 +74,7 @@ class ClientList(models.Model):
     create_time = models.DateTimeField(_('creation time'), default=now)
     update_time = models.DateTimeField(_('modify time'), default=now)
 
+
 class ClientListConfig(models.Model):
     """OpenVPN client proxy config model"""
     validate_comma_separated_integer_list = int_list_validator(
