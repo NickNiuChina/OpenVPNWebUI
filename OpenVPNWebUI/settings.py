@@ -13,11 +13,12 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 from django.contrib.messages import constants as messages
+# read user setting from config.yml
+from .conf import ConfigManager
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
+CONFIG = ConfigManager.load_user_config()
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -25,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY') or 'django-insecure-803cf=uonr+vx87tjd5)xd8qxn0mfnh5h=9cwvqk!4=-+u+@a7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = CONFIG.DEBUG or False
 
 ALLOWED_HOSTS = ['*', '127.0.0.1']
 
@@ -83,13 +84,12 @@ WSGI_APPLICATION = 'OpenVPNWebUI.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DJANGO_MYSQL_DATABASE') or 'ovpnmgmt',
-        'USER': os.environ.get('DJANGO_MYSQL_USER') or 'root',
-        'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD') or 'rootroot',
-        'HOST': os.environ.get('DJANGO_MYSQL_HOST') or '127.0.0.1',
-        'PORT': int(
-            os.environ.get('DJANGO_MYSQL_PORT') or 3306),
+        'ENGINE': 'django.db.backends.{}'.format(CONFIG.DB_ENGINE.lower()),
+        'NAME': CONFIG.DB_NAME,
+        'USER': CONFIG.DB_USER,
+        'PASSWORD': CONFIG.DB_PASSWORD,
+        'HOST': CONFIG.DB_HOST,
+        'PORT': int(CONFIG.DB_PORT),
         'OPTIONS': {
             'charset': 'utf8mb4'},
     }}
@@ -147,3 +147,71 @@ MESSAGE_TAGS = {
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 30 * 60
+
+# logs
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+        },
+        "verbose": {
+            "format":  "{asctime} {process:d} {threadName} {thread:d} {pathname} {lineno} {levelname}: {message}",
+            # {filename} - views.py
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    'filters': {
+        # 'special': {
+        #     '()': 'project.logging.SpecialFilter',
+        #     'foo': 'bar',
+        # },
+        # catch log only if debug is True
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'default': {
+            'level':CONFIG.LOG_LEVEL or "INFO",
+            'class':'logging.handlers.TimedRotatingFileHandler',
+            'filename': CONFIG.LOG_FILES,
+            # 'maxBytes': 1024*1024*5, # 5 MB
+            'when': 'midnight',
+            'backupCount': 10,
+            'formatter':'verbose',
+        },  
+        'request_handler': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': 'logs/django_request.log',
+            'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount': 10,
+            'formatter':'standard',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',  
+            'formatter': 'standard'
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['default'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+        # catch request status 200
+        'django.server': {
+            'handlers': ['request_handler', "console"],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+    }
+}

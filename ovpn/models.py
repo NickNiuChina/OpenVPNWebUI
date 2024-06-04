@@ -104,3 +104,11 @@ class ClientListConfig(models.Model):
     )
     create_time = models.DateTimeField(_('creation time'), default=now)
     update_time = models.DateTimeField(_('modify time'), default=now)
+    
+    
+class SystemCommonConfig(models.Model):
+    """System wide common config model"""
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True)
+    req_file_dir = models.CharField(max_length=200, null=True, blank=True)
+    cert_file_dir = models.CharField(max_length=200, null=True, blank=True)
+    cert_zipfile_dir = models.CharField(max_length=200, null=True, blank=True)

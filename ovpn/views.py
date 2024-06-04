@@ -15,6 +15,7 @@ import pathlib
 from utils.OpenVPNParser import OpenVPNParser
 from utils.LogParser import LogParser
 from django.db.models import Q, CharField, Value
+import logging
 
 
 def index(request):
@@ -27,6 +28,8 @@ def index(request):
         template: template main.html with context of system informations
     """
     system_type = platform.system()
+    log = logging.getLogger()
+    log.info("Request to ovpn:index")
     system_info = {
         "system_type": system_type,
         "system_version": platform.release(),
@@ -152,8 +155,8 @@ def server_update(request, sid):
     """ OpenVPN server update
 
     Args:
-        request (_type_): _description_
-        sid (_type_): _description_
+        request (django.http.request): django http request
+        sid (uuid): openvpn service uuid
 
     Returns:
         _type_: _description_
