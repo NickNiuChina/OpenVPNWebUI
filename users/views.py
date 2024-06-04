@@ -72,7 +72,7 @@ def user_delete(request):
                 return redirect("users:users")
         else:
             messages.error(request, "UUID is required for this request")
-            return redirect("ovpn:servers")
+            return redirect("users:users")
 
 
 def user_update(request, sid=None):
@@ -91,12 +91,18 @@ def user_update(request, sid=None):
         context = {'form': form, 'id': sid}
         return render(request, 'auth/user_update.html', context)
     elif request.method == 'POST':
-        form = UserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'The user has been updated successfully.')
-            return redirect('users:users')
+        formset = UserForm(request.POST, instance=user)
+        if formset.is_valid():
+            if formset.data['password'] == formset.data['confirm_password']:
+                user = formset.save(commit=False)
+                user.password = make_password(user.password)
+                user.save()
+                messages.success(request, "User has been updated successfully!")
+            else:
+                messages.error(request, "Password does match, please check!")
+            return redirect('ovpn:servers')
         else:
-            messages.error(request, 'Please correct the following errors: ' + str(form.errors))
+            messages.error(request, 'Please correct the following errors: ' + str(formset.errors))
             context = {'form': UserForm(instance=user), 'id': sid}
-            return render(request, 'user/user_update.html', context)
+            return redirect("users:user_update", sid=sid)
+        

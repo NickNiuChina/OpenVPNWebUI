@@ -52,10 +52,10 @@ class UserGroup(models.Model):
 
     @classmethod
     def initial(cls):
-        super_group = cls.objects.filter(name='SUPER')
-        admin_group = cls.objects.filter(name='ADMIN')
-        user_group = cls.objects.filter(name='USER')
-        guest_group = cls.objects.filter(name='GUEST')
+        super_group = cls.objects.get(name='SUPER')
+        admin_group = cls.objects.get(name='ADMIN')
+        user_group = cls.objects.get(name='USER')
+        guest_group = cls.objects.get(name='GUEST')
         if not admin_group:
             group = cls(name='ADMIN')
             group.save()
@@ -68,6 +68,6 @@ class UserGroup(models.Model):
         if not super_group:
             group = cls(name='SUPER')
             group.save()
-        else:
-            group = super_group[0]
-        return group
+        super_group = cls.objects.get(name='SUPER')
+        return super_group
+    
