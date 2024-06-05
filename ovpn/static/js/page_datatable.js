@@ -183,4 +183,8 @@ $(document).ready(function() {
         $('#client_cn').val(data[1]);
         $('#client_old_name').val(data[0]);
     });
+
+    setInterval(function() {
+        tunTBclientStatus.ajax.reload();
+    }, 30000);
 });
