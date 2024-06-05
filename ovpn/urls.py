@@ -33,6 +33,8 @@ urlpatterns = [
     path('<str:ovpn_service>/logs', views.server_logs, name='server_logs'),
     path('<str:ovpn_service>/log/<str:log_file>', views.server_log, name='server_log'),
 
+    # System config urls
+    path('system/config', views.system_config, name='system_config'),
     path('show/settings', views.show_settings, name='settings'),
     path('show/sessions', views.show_sessions, name='sessions'),
 ]

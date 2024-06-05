@@ -1,5 +1,5 @@
 from django import forms
-from .models import Servers, ClientList
+from .models import Servers, ClientList, SystemCommonConfig
 
 
 class ServersForm(forms.ModelForm):
@@ -25,7 +25,7 @@ class ServersForm(forms.ModelForm):
           'comment': forms.Textarea(attrs={'rows': 2}),
         }
 
-class ClientList(forms.ModelForm):
+class ClientListForm(forms.ModelForm):
     class Meta:
         model = ClientList
         fields = [
@@ -40,3 +40,10 @@ class ClientList(forms.ModelForm):
         widgets = {
           'comment': forms.Textarea(attrs={'rows': 2}),
         }
+        
+        
+
+class SystemCommonConfigForm(forms.ModelForm):
+    class Meta:
+        model = SystemCommonConfig
+        exclude = [id,]

@@ -107,7 +107,7 @@
 	    {% endif %}
 
 
-		{# management menu for super only #}
+		{# management menu for privis users #}
 		{% if request.session.authenticated.group == 'SUPER' %}
 	       <li class="nav-item menu-open">
 	        <a href="javascript:void(0);" class="nav-link">
@@ -120,9 +120,9 @@
 	        <ul class="nav nav-treeview">
 						
 	          <li class="nav-item">
-	            <a href="/" class="nav-link">
+	            <a href="{% url 'ovpn:system_config' %}" class="nav-link">
 	              <i class="nav-icon far fa-file"></i>
-	              <p>System</p>
+	              <p>Common config</p>
 	            </a>
 	          </li>
 	

@@ -15,7 +15,7 @@
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 			<ol class="breadcrumb float-sm-right">
-				<li class="breadcrumb-item"><a href="{{ url_for('ovpn.index') }}">Home</a></li>
+				<li class="breadcrumb-item"><a href="{% url 'ovpn:index' %}">Home</a></li>
 				<li class="breadcrumb-item active">Main</li>
 			</ol>
 			</div>
@@ -25,15 +25,15 @@
 	{#  content-header END #}
 
 
-	{% with messages = get_flashed_messages(with_categories=true) %}
 	{% if messages %}
-		<ul class=flashes>
-		{% for category, message in messages %}
-		<div class="text-{{ category }}">{{ message }}</div>
-		{% endfor %}
+		<ul class="flashes">
+		{% for message in messages %}
+			<div class="text-{{ message.tags }}">
+				{{ message }}
+			</div>
+	{% endfor %}
 		</ul>
 	{% endif %}
-	{% endwith %}
 	
 
 
@@ -43,36 +43,39 @@
 
 		<div class="col-md-8">
 			<div class="card card-secondary">
-				
-			{# <div class="alert alert-danger alert-dismissible fade show" role="alert">
-			  <strong>Holy guacamole!</strong> You should check in on some of those fields below.
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			    <span aria-hidden="true">&times;</span>
-			  </button>
-			</div> #}		
-				<div id="liveAlertPlaceholder"></div>
 					
 				<div class="card-header">
 				<h3 class="card-title">Config</h3>
 				</div>
-			
+				<form method="post">
+				{% csrf_token %}
 				<div class="card-body">
-		            <table id="tbSystemConfig" class="table table-bordered table-striped table-hover">
+		            <table id="tb_system_config" class="table table-bordered table-striped table-hover">
 		              <thead>
 		              <tr>
 		                <th>Items</th>
 		                <th>Values</th>
-
 		              </tr>
 		              </thead>
-		 
+		 			  <tbody>
+					  {% if fields %}
+						{% for f in fields %}
+							<tr>
+								<th>{{f.label|capfirst}}</th>
+								<th>
+								<input type="text" class="form-control" name="{{ f.name }}" value="{{f.value|default_if_none:''}}">
+								</th>
+							</tr>
+						{% endfor %}
+					  {% endif %}
+					  </tbody>
 		            </table>	
 				</div>
 					
 				<div class="card-footer">
 					<button type="submit" id='updateSystemConfig' class="btn btn-info float-right">Update</button>
 				</div>			
-
+				</form>
 		</div>
 
 	  </div>

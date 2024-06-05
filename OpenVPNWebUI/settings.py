@@ -179,10 +179,11 @@ LOGGING = {
     'handlers': {
         'default': {
             'level':CONFIG.LOG_LEVEL or "INFO",
-            'class':'logging.handlers.TimedRotatingFileHandler',
+            'class':'logging.handlers.RotatingFileHandler',
+            # 'class':'logging.handlers.TimedRotatingFileHandler',
             'filename': CONFIG.LOG_FILES,
-            # 'maxBytes': 1024*1024*5, # 5 MB
-            'when': 'midnight',
+            'maxBytes': 1024*1024*5, # 5 MB
+            # 'when': 'midnight',
             'backupCount': 10,
             'formatter':'verbose',
         },  

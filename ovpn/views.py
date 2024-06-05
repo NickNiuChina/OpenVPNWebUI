@@ -3,11 +3,11 @@ import subprocess
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Servers, ClientList
+from .models import Servers, ClientList, SystemCommonConfig
 from users.models import User, UserGroup
 import platform
 import datetime
-from .forms import ServersForm
+from .forms import ServersForm, SystemCommonConfigForm
 import uuid
 import psutil
 import time
@@ -341,6 +341,32 @@ def clients(request, ovpn_service=None):
     # get request
     else:
         return render(request, 'ovpn/clients.html', context)
+
+
+def system_config(request):
+    system_config = SystemCommonConfig.objects.all().first()
+    form = SystemCommonConfigForm(instance=system_config)
+    fields = []
+    for f in system_config._meta.fields:
+        fname = f.name        
+        # resolve picklists/choices, with get_xyz_display() function
+        get_choice = 'get_'+fname+'_display'
+        if hasattr(system_config, get_choice):
+            value = getattr(system_config, get_choice)()
+        else:
+            try:
+                value = getattr(system_config, fname)
+            except AttributeError:
+                value = None
+        if f.name not in ('id', ) :        
+            fields.append(
+                {
+                'label':f.verbose_name, 
+                'name':f.name, 
+                'value':value,
+                }
+            )
+    return render(request, 'ovpn/system_config.html', {"fields": fields})
 
 
 def show_settings(request):

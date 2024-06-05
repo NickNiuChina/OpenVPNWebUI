@@ -108,7 +108,10 @@ class ClientListConfig(models.Model):
     
 class SystemCommonConfig(models.Model):
     """System wide common config model"""
+    PROXY_SERVER_CHOICE = [(0, "nginx"), (1, "apache")]
+    
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
+    proxy_server = models.IntegerField(choices=PROXY_SERVER_CHOICE, default=1, null=True, blank=True)
     req_file_dir = models.CharField(max_length=200, null=True, blank=True)
     cert_file_dir = models.CharField(max_length=200, null=True, blank=True)
     cert_zipfile_dir = models.CharField(max_length=200, null=True, blank=True)

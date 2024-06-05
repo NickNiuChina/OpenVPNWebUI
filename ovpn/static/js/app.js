@@ -5,20 +5,20 @@ $(document).ready(function() {
     var cn;
     var storename;
 
-    const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
-    const appendAlert = (message, type) => {
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = [
-            `<div class="alert alert-${type} alert-dismissible fade show " role="alert">`,
-            `   <div>${message}</div>`,
-            '   <button type="button" class="close" data-dismiss="alert" aria-label="Close">',
-            '<span aria-hidden="true">&times;</span>',
-            '</button>',
-            '</div>'
-        ].join('\n');
+    // const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+    // const appendAlert = (message, type) => {
+    //     const wrapper = document.createElement('div');
+    //     wrapper.innerHTML = [
+    //         `<div class="alert alert-${type} alert-dismissible fade show " role="alert">`,
+    //         `   <div>${message}</div>`,
+    //         '   <button type="button" class="close" data-dismiss="alert" aria-label="Close">',
+    //         '<span aria-hidden="true">&times;</span>',
+    //         '</button>',
+    //         '</div>'
+    //     ].join('\n');
 
-        alertPlaceholder.append(wrapper);
-    };
+    //     alertPlaceholder.append(wrapper);
+    // };
 
     function formatDate(date) {
         var d = new Date(date),
@@ -57,10 +57,10 @@ $(document).ready(function() {
         // console.log(a);
         if ($(a).attr("href") === location.pathname) {
             $(a).addClass("active");
-            console.log("==========================");
+            // console.log("==========================");
         } else {
             $(a).removeClass("active");
-            console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnnn");
+            // console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnnn");
         }
     });
 
