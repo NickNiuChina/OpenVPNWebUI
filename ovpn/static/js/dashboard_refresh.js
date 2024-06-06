@@ -35,6 +35,14 @@ $(document).ready(function() {
             $("#db_swap").html("Swap <b>" + system_info.swap_used + "</b>/" + system_info.swap_total + " MB - " + system_info.swap_percent + " %");
             $("#db_openvpn_version").text(system_info.openvpn_version);
             $("#db_system_information").text(system_info.system_information);
+
+            var memory_percent = parseFloat(system_info.memory_percent).toFixed(1);
+            $('#memory_progressBar').css('width', memory_percent.toString() + '%');
+            $('#momery_progressBar').html(memory_percent.toString() + '%');
+
+            var swap_percent = parseFloat(system_info.swap_percent).toFixed(1);
+            $('#swap_progressBar').css('width', swap_percent.toString() + '%');
+            $('#swap_progressBar').html(swap_percent.toString() + '%');
         });
     };
 

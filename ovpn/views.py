@@ -362,7 +362,8 @@ def system_config(request):
     if request.method == "POST":
         form = SystemCommonConfigForm(request.POST, instance=system_config)
         if form.is_valid():
-            messages.success(request, "valid")
+            messages.success(request, "Values updated!")
+            form.save()
         else:
             messages.error(request, form.errors)
         return redirect("ovpn:system_config")

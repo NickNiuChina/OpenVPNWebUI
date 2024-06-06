@@ -11,7 +11,7 @@
 		<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-			<h1 class="m-0"> Generate boss clients certification </h1>
+			<h1 class="m-0"> Generate certifications </h1>
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 			<ol class="breadcrumb float-sm-right">
@@ -37,27 +37,52 @@
 	
 	<section class="content">
 	  <div class="container-fluid">
-		<h4 class="m-0">Upload Req file for tun clients</h4>
-		<div class="col-md-6 "> {# mx-auto #}
-		    <form method="post" action="" enctype ="multipart/form-data">
-		        <div class="input-group">
-		            <label>请输入需要生成的CN（字母 数字 与 _ - 组合）：</label>
-		            <div class="input-group">
-		                <input type="text" 
-		                        placeholder="请输入cn" 
-		                        class="custom-text-input" 
-		                        name="new_cn" 
-		                        id="new_cn" 
-		                        required
+		<div class="row">
+			<h4 class="col-md-12 mb-3">Generate OpenVPN cer files</h4>
+            <div class="card card-primary col-md-8">
+              <div class="card-header">
+                <h3 class="card-title">Upload REQ file to generate cert file</h3>
+              </div>
+
+              <form method="post">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="generateCertInputFile">Select REQ file</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+		                <input type="file" id="generateCertInputFile"
+		                       class="custom-file-input" 
+		                       name="upload_req" 
+		                       id="upload_req" 
+		                       accept=".req"
+		                       required 
 		                />
-		
-		            </div>
-		
-		            <div class="input-group-append">
-		                <input class="btn btn-primary" type="submit" value="Confirm" />
-		            </div>
-		        </div>
-		     </form>
+                        <label class="custom-file-label" for="examplegenerateCertInputFileInputFile">Choose file</label>
+                      </div>
+                      <div class="input-group-append">
+						<button type="submit" class="btn btn-primary">Upload</button>
+                      </div>
+                    </div>
+                  </div>
+              </form>
+            </div>
+
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Generate certification by giving CN</h3>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="new_cn">Please input a new CN, such as: <code>ovpn-client-BQ_Fremont_hr-windows</code></label>
+                  <input type="text" name="new_cn" class="form-control form-control-border" id="new_cn" placeholder="new cn">
+                </div>
+
+              </div>
+              <div class="card-footer">
+                  <button type="submit" class="btn btn-primary float-right">Submit</button>
+              </div>
+            </div>
+
 		</div>
 	  </div>
 	</section>  
