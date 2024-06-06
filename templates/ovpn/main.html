@@ -127,7 +127,7 @@
 					  </span>
 					  <div class="progress progress-xs">
 						<div class="progress-bar bg-primary progress-bar-striped"
-						  style="width: 45%">
+						  style="width: {{ system_info.memory_percent |stringformat:"d%%" }}">
 						</div>
 					  </div>
 					</div>
@@ -147,7 +147,7 @@
 					  </span>
 					  <div class="progress progress-xs">
 						<div class="progress-bar bg-primary progress-bar-striped"
-						  style="width: 56%">
+						  style="width: {{ system_info.swap_percent |stringformat:"d%%" }}">
 						</div>
 					  </div>
 					</div>

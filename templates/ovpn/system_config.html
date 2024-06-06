@@ -45,29 +45,39 @@
 			<div class="card card-secondary">
 					
 				<div class="card-header">
-				<h3 class="card-title">Config</h3>
+					<h3 class="card-title">Config</h3>
 				</div>
 				<form method="post">
 				{% csrf_token %}
 				<div class="card-body">
 		            <table id="tb_system_config" class="table table-bordered table-striped table-hover">
 		              <thead>
-		              <tr>
-		                <th>Items</th>
-		                <th>Values</th>
-		              </tr>
+						<tr>
+							<th>Items</th>
+							<th>Values</th>
+						</tr>
 		              </thead>
 		 			  <tbody>
-					  {% if fields %}
-						{% for f in fields %}
-							<tr>
-								<th>{{f.label|capfirst}}</th>
-								<th>
-								<input type="text" class="form-control" name="{{ f.name }}" value="{{f.value|default_if_none:''}}">
-								</th>
-							</tr>
-						{% endfor %}
-					  {% endif %}
+					  	<tr hidden="hidden">
+							<th>Proxy server</th>
+							<th>{{ form.id }}</th>
+						</tr>	
+						<tr>
+							<th>Proxy server</th>
+							<th>{{ form.proxy_server }}</th>
+						</tr>	
+						<tr>
+							<th>Req file dir</th>
+							<th>{{ form.req_file_dir }}</th>
+						</tr>
+						<tr>
+							<th>Cert file dir</th>
+							<th>{{ form.cert_file_dir }}</th>
+						</tr>
+						<tr>
+							<th>Cert zipfile dir</th>
+							<th>{{ form.cert_zipfile_dir }}</th>
+						</tr>				
 					  </tbody>
 		            </table>	
 				</div>

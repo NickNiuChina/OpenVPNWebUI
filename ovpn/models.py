@@ -115,3 +115,15 @@ class SystemCommonConfig(models.Model):
     req_file_dir = models.CharField(max_length=200, null=True, blank=True)
     cert_file_dir = models.CharField(max_length=200, null=True, blank=True)
     cert_zipfile_dir = models.CharField(max_length=200, null=True, blank=True)
+    
+    # Use this method to initial
+    @classmethod
+    def initial(cls):
+        print( cls.__name__ + " model initial method executed!")
+        sc = cls.objects.all().first()
+        if not sc:
+            nc = cls()
+            nc.save()
+
+    def __str__(self):
+        return '{0.name}({0.username})'.format(self)

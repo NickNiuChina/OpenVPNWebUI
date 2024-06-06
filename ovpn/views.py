@@ -51,7 +51,7 @@ def index(request):
     memory_percent = psutil.virtual_memory().percent
     swap_total = round(psutil.swap_memory().total/1024/1024, 1)
     swap_used = round(psutil.swap_memory().used/1024/1024, 1)
-    swap_percent = round(psutil.swap_memory().percent/1024/1024, 1)
+    swap_percent = round(psutil.swap_memory().percent, 1)
 
     if system_type.startswith("Linux"):
         openvpn_version = OpenVPNParser.get_openvpn_version()
@@ -343,10 +343,31 @@ def clients(request, ovpn_service=None):
         return render(request, 'ovpn/clients.html', context)
 
 
+def generate_cert(request, ovpn_service=None):
+    
+    ovpn_service = get_object_or_404(Servers, server_name=ovpn_service)
+    context = {"ovpn_service": ovpn_service}
+    return render(request, "ovpn/generate_cert.html", context)
+
+
 def system_config(request):
     system_config = SystemCommonConfig.objects.all().first()
     form = SystemCommonConfigForm(instance=system_config)
-    fields = []
+    
+    if not system_config:
+        nsc = SystemCommonConfig()
+        nsc.save()
+        system_config = SystemCommonConfig.objects.all().first()
+    
+    if request.method == "POST":
+        form = SystemCommonConfigForm(request.POST, instance=system_config)
+        if form.is_valid():
+            messages.success(request, "valid")
+        else:
+            messages.error(request, form.errors)
+        return redirect("ovpn:system_config")
+    fields = []   
+    # https://stackoverflow.com/questions/2170228/iterate-over-model-instance-field-names-and-values-in-template
     for f in system_config._meta.fields:
         fname = f.name        
         # resolve picklists/choices, with get_xyz_display() function
@@ -366,7 +387,7 @@ def system_config(request):
                 'value':value,
                 }
             )
-    return render(request, 'ovpn/system_config.html', {"fields": fields})
+    return render(request, 'ovpn/system_config.html', {"form": form})
 
 
 def show_settings(request):

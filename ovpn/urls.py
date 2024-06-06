@@ -28,6 +28,7 @@ urlpatterns = [
     
     # openvpn client list
     path('<str:ovpn_service>/clients', views.clients, name='clients'),
+    path('<str:ovpn_service>/generate_cert', views.generate_cert, name='generate_cert'),
     
     # openvpn server logs
     path('<str:ovpn_service>/logs', views.server_logs, name='server_logs'),

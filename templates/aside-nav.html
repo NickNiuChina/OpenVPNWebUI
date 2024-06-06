@@ -50,16 +50,9 @@
 	          </li>
 	
 	          <li class="nav-item">
-	            <a href="/" class="nav-link">
+	            <a href="{% url 'ovpn:generate_cert' ovpn_service=service_name %}" class="nav-link">
 	              <i class="nav-icon far fa-file"></i>
-	              <p>Generate boss cert</p>
-	            </a>
-	          </li>
-	
-	          <li class="nav-item">
-	            <a href="/" class="nav-link">
-	              <i class="nav-icon far fa-file"></i>
-	              <p>Generate generic cert</p>
+	              <p>Generate cert</p>
 	            </a>
 	          </li>
 	

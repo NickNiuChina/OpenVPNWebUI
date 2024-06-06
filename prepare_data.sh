@@ -3,3 +3,4 @@
 
 # customization user create
 echo "from users.models import User; User.initial()" | python manage.py shell
+echo "from ovpn.models import SystemCommonConfig; SystemCommonConfig.initial()" | python manage.py shell

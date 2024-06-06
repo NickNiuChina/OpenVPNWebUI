@@ -25,6 +25,8 @@ class ServersForm(forms.ModelForm):
           'comment': forms.Textarea(attrs={'rows': 2}),
         }
 
+
+# Not in use
 class ClientListForm(forms.ModelForm):
     class Meta:
         model = ClientList
@@ -42,8 +44,15 @@ class ClientListForm(forms.ModelForm):
         }
         
         
-
+# Nor in use
 class SystemCommonConfigForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(SystemCommonConfigForm, self).__init__(*args, **kwargs)
+        self.fields['id'].widget.attrs['readonly'] = True
+        
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+    
     class Meta:
         model = SystemCommonConfig
         exclude = [id,]
