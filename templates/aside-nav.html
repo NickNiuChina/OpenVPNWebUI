@@ -57,23 +57,37 @@
 	          </li>
 	
 	          <li class="nav-item">
-	            <a href="/" class="nav-link">
+	            <a href="{% url 'ovpn:plain_certs' ovpn_service=service_name %}" class="nav-link">
 	              <i class="nav-icon far fa-file"></i>
-	              <p>OVPN REQ files</p>
+	              <p>OVPN plain cert files</p>
 	            </a>
 	          </li>
-	
+
+	          <li class="nav-item">
+	            <a href="{% url 'ovpn:encrypt_certs' ovpn_service=service_name %}" class="nav-link">
+	              <i class="nav-icon far fa-file"></i>
+	              <p>OVPN encrypt cert files</p>
+	            </a>
+	          </li>
+
 	          <li class="nav-item">
 	            <a href="/" class="nav-link">
 	              <i class="nav-icon far fa-file"></i>
-	              <p>OVPN cert files</p>
+	              <p>OVPN plain REQ files</p>
 	            </a>
 	          </li>
-	
+
 	          <li class="nav-item">
 	            <a href="/" class="nav-link">
 	              <i class="nav-icon far fa-file"></i>
-	              <p>Generic client certs</p>
+	              <p>OVPN encrypt REQ files</p>
+	            </a>
+	          </li>
+
+	          <li class="nav-item">
+	            <a href="/" class="nav-link">
+	              <i class="nav-icon far fa-file"></i>
+	              <p>Cert common files</p>
 	            </a>
 	          </li>
 

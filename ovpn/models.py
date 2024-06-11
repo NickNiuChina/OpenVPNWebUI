@@ -112,9 +112,11 @@ class SystemCommonConfig(models.Model):
     
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     proxy_server = models.IntegerField(choices=PROXY_SERVER_CHOICE, default=1, null=True, blank=True)
-    req_file_dir = models.CharField(max_length=200, null=True, blank=True)
-    cert_file_dir = models.CharField(max_length=200, null=True, blank=True)
-    cert_zipfile_dir = models.CharField(max_length=200, null=True, blank=True)
+    plain_req_file_dir = models.CharField(max_length=200, null=False, blank=False, default="plain_reqs")
+    encrypt_req_file_dir = models.CharField(max_length=200, null=False, blank=False, default="encrypt_reqs")
+    plain_cert_file_dir = models.CharField(max_length=200, null=True, blank=False, default='plain_certs')
+    encrypt_cert_file_dir = models.CharField(max_length=200, null=False, blank=False, default="encrypt_certs")
+    zip_cert_dir = models.CharField(max_length=200, null=False, blank=False, default="zip_certs")
     
     # Use this method to initial
     @classmethod

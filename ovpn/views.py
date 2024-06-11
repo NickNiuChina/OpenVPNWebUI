@@ -212,7 +212,7 @@ def server_logs(request, ovpn_service=None):
             messages.error(request, "The OpenVPN logs file dir do not exist!")
             return render(request, 'ovpn/server_logs.html', context)
     else:
-        messages.error(request, "This APP should run on linux debian platform!:")
+        messages.error(request, "This APP should run on linux debian platform!")
         return render(request, 'ovpn/server_logs.html', context)
 
 
@@ -349,6 +349,35 @@ def generate_cert(request, ovpn_service=None):
     ovpn_service = get_object_or_404(Servers, server_name=ovpn_service)
     context = {"ovpn_service": ovpn_service}
     return render(request, "ovpn/generate_cert.html", context)
+
+
+def plain_certs(request, ovpn_service=None):
+    server = get_object_or_404(Servers, server_name=ovpn_service)
+    context = {"ovpn_service": ovpn_service}
+    plain_certs = []
+    
+    if platform.system().startswith("Linux"):
+        cert_files_dir = pathlib.Path(server.certs_dir)
+        if cert_files_dir.exists():
+            for f in list(cert_files_dir.iterdir()):
+                if f.is_file() and f.name.endswith(".log"):
+                    plain_certs.append({"log_name": f.name, "log_size": round(f.stat().st_size/1024, 1)})
+            if not plain_certs:
+                messages.error(request, "No OpenVPN logfiles found!")
+                return render(request, 'ovpn/server_logs.html', context)
+            else:
+                context.update({"ovpn_logs": plain_certs})
+                return render(request, 'ovpn/server_logs.html', context)
+        else:
+            messages.error(request, "The OpenVPN logs file dir do not exist!")
+            return render(request, 'ovpn/server_logs.html', context)
+    else:
+        messages.error(request, "This APP should run on linux debian platform!")
+        return render(request, 'ovpn/ovpn_plain_certs.html')
+
+
+def encrypt_certs(request, ovpn_service=None):
+    return render(request, 'ovpn/ovpn_encrypt_certs.html')
 
 
 def system_config(request):
