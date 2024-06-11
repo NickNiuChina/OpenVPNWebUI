@@ -29,6 +29,7 @@ def index(request):
     """
     system_type = platform.system()
     log = logging.getLogger()
+    log.debug("Request to ovpn:index")
     log.info("Request to ovpn:index")
     system_info = {
         "system_type": system_type,

@@ -146,7 +146,8 @@ MESSAGE_TAGS = {
 }
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = 30 * 60
+# 4h
+SESSION_COOKIE_AGE = 60 * 60 * 4 
 
 # logs
 LOGGING = {
@@ -157,7 +158,7 @@ LOGGING = {
             'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
         },
         "verbose": {
-            "format":  "{asctime} {process:d} {threadName} {thread:d} {pathname} {lineno} {levelname}: {message}",
+            "format":  "{asctime} {process:d} {threadName} {thread:d} {filename} {lineno} {levelname}: {message}",
             # {filename} - views.py
             "style": "{",
         },

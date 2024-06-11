@@ -37,82 +37,69 @@
 	
 	<section class="content">
 	  <div class="container-fluid">
-		<div class="row">
-			<h4 class="col-md-12 mb-3">Generate OpenVPN certification files</h4>
+      <div class="row">
+        <h4 class="col-md-12 mb-3">Generate OpenVPN certification files</h4>
 
-            <div class="card card-primary col-md-8">
-              <div class="card-header mt-3">
-                <h3 class="card-title">Generate certification by giving CN</h3>
-              </div>
-              <div class="card-body">
-                <div class="form-group">
-                  <label for="new_cn">Please input a new CN, such as: <code>ovpn-client-BQ_Fremont_hr-windows</code></label>
-                  <input type="text" name="new_cn" class="form-control form-control-border" id="new_cn" placeholder="new cn">
+              <div class="card card-primary col-md-8">
+                <div class="card-header mt-3">
+                    <h3 class="card-title">Generate certification by giving CN</h3>
                 </div>
-
-              </div>
-              <div class="card-footer">
-                  <button type="submit" class="btn btn-primary float-right">Submit</button>
-              </div>
-            </div>
-
-            <div class="card card-primary col-md-8">
-              <div class="card-header mt-3">
-                <h3 class="card-title">Upload REQ file to generate cert file</h3>
-              </div>
-
-              <form method="post">
                 <div class="card-body">
-                  <div class="form-group">
-                    <label for="generateCertInputFile">Select REQ file</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-		                <input type="file" id="generateCertInputFile"
-		                       class="custom-file-input" 
-		                       name="upload_req" 
-		                       id="upload_req" 
-		                       accept=".req"
-		                       required 
-		                />
-                        <label class="custom-file-label" for="examplegenerateCertInputFileInputFile">Choose file</label>
-                      </div>
-                      <div class="input-group-append">
-						<button type="submit" class="btn btn-primary">Upload</button>
+                    <div class="form-group">
+                      <label for="new_cn">Please input a new CN, such as: <code>ovpn-client-BQ_Fremont_hr-windows</code></label>
+                      <input type="text" name="new_cn" class="form-control form-control-border" id="new_cn" placeholder="new cn">
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary float-right">Submit</button>
+                </div>
+              </div>
+
+              <div class="card card-primary col-md-8">
+                <div class="card-header mt-3">
+                    <h3 class="card-title">Upload Plain REQ file to generate cert file</h3>
+                </div>
+                <form method="post">
+                    <div class="card-body">
+                      <div class="form-group">
+                          <label for="generatePlainCert">Select Plain REQ file</label>
+                          <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" id="generatePlainCert" class="custom-file-input" name="upload_plain_req" accept=".req" required="">
+                                <label class="custom-file-label" for="generatePlainCert">Choose plain req file</label>
+                            </div>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary">Upload</button>
+                            </div>
+                          </div>
                       </div>
                     </div>
-                  </div>
-              </form>
-            </div>
-
-
-            <div class="card card-primary col-md-8">
-              <div class="card-header mt-3">
-                <h3 class="card-title">Upload REQ file to generate cert file</h3>
+                </form>
               </div>
-              <form method="post">
-                <div class="card-body">
-                  <div class="form-group">
-                    <label for="generateCertInputFile">Select REQ file</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-		                <input type="file" id="generateCertInputFile"
-		                       class="custom-file-input" 
-		                       name="upload_req" 
-		                       id="upload_req" 
-		                       accept=".req"
-		                       required 
-		                />
-                        <label class="custom-file-label" for="examplegenerateCertInputFileInputFile">Choose file</label>
-                      </div>
-                      <div class="input-group-append">
-						<button type="submit" class="btn btn-primary">Upload</button>
+
+              <div class="card card-primary col-md-8">
+                <div class="card-header mt-3">
+                    <h3 class="card-title">Upload Encrypt REQ file to generate cert file</h3>
+                </div>
+                <form method="post">
+                    <div class="card-body">
+                      <div class="form-group">
+                          <label for="generateEncryptCert">Select Encrypt REQ file</label>
+                          <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" id="generateEncryptCert" class="custom-file-input" name="upload_encrypt_req" accept=".req" required="">
+                                <label class="custom-file-label" for="generateEncryptCert">Choose encrypt req file</label>
+                            </div>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary">Upload</button>
+                            </div>
+                          </div>
                       </div>
                     </div>
-                  </div>
-              </form>
-            </div>
+                </form>
+              </div>
 
-		</div>
+      </div>
 	  </div>
 	</section>  
 
