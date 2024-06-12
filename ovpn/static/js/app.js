@@ -853,6 +853,18 @@ $(document).ready(function() {
         });
     });
 
+    // Plain cert page
+    $('tbody').on('click', '.delete_cert_file', function() {
+        // alert("debug");
+        $('#delete_plain_cert_modal').modal('show');
+        $tr = $(this).closest('tr');
+        var data = $tr.children("th").map(function() {
+            return $(this).text();
+        }).get();
+
+        $('#delete_plain_cert').val(data[0]);
+    });
+
 });
 
 $(document).ready(function() {

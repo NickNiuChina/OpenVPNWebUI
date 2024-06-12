@@ -30,7 +30,9 @@ urlpatterns = [
     path('<str:ovpn_service>/clients', views.clients, name='clients'),
     path('<str:ovpn_service>/generate_cert', views.generate_cert, name='generate_cert'),
     path('<str:ovpn_service>/plain_certs', views.PlainCertsView.as_view(), name='plain_certs'),
+    path('<str:ovpn_service>/plain_cert/<str:cert_file>', views.PlainCertsView.as_view(), name='plain_cert'),
     path('<str:ovpn_service>/encrypt_certs', views.encrypt_certs, name='encrypt_certs'),
+    path('<str:ovpn_service>/encrypt_cert/<str:cert_file>', views.encrypt_certs, name='encrypt_cert'),
     
     # openvpn server logs
     path('<str:ovpn_service>/logs', views.server_logs, name='server_logs'),

@@ -48,20 +48,22 @@
 							<thead>
 								<tr>
 									<th>Filename</th>
+									<th>size(KB)</th>
 									<th>GrenerateDate</th>
 									<th>Operation</th>
 								</tr>
 							</thead>
 							<tbody>
-							{% if ovpn_logs %}
-							{% for log in ovpn_logs %}
+							{% if plain_certs %}
+							{% for cert in plain_certs %}
 								<tr>
-									<th>{{ log.log_name }}</th>
-									<th>{{ log.log_size }}</th>
+									<th>{{ cert.cert_name }}</th>
+									<th>{{ cert.cert_size }}</th>
+									<th>{{ cert.create_time }}</th>
 									<th>
-										<a href="{% url 'ovpn:server_log' ovpn_service=server.server_name log_file=log.log_name %}" class="btn btn-primary">View</a>
-										<a href="{% url 'ovpn:server_logs' ovpn_service=server.server_name %}" class="btn btn-primary">Delete</a>
-										<a href="{% url 'ovpn:server_logs' ovpn_service=server.server_name %}" class="btn btn-primary">Download</a>
+										<a href="{% url 'ovpn:plain_cert' ovpn_service=server.server_name cert_file=cert.cert_name %}" class="btn btn-primary">View</a>
+										<a href="javascript:void(0);" class="btn btn-danger delete_cert_file">Delete</a>
+										<a href="{% url 'ovpn:plain_certs' ovpn_service=server.server_name %}" class="btn btn-primary">Download</a>
 									</th>
 								</tr>
 							{%  endfor %}
@@ -74,6 +76,53 @@
 		</div>
 
 
+		{# delete cert file modal #}
+		<div class="modal fade" id="delete_plain_cert_modal" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<form action="" method="post">
+						<div class="modal-header">
+							<h4 class="modal-title" id="udpate-myModalLabel">Delete plain certification file</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div id="Client cn"></div>
+							<div id="current_site_name"></div>
+							<div class="form-group hidden">
+								{% csrf_token %}
+								<input type="hidden" name="action" value="delete_plain_cert" />
+								<label for="delete_plain_cert" class="control-label">certification file</label>
+								<input type="text" class="form-control" name="delete_plain_cert" id="delete_plain_cert" readonly>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							<button type="submit" class="btn btn-danger">Confirm</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
 	</section>
 </div>
 {% endblock %}
+
+
+<script>
+$(document).ready(function() {
+    // Plain cert page
+    $('tbody').on('click', '.delete_cert_file', function() {
+        $('#delete_plain_cert_modal').modal('show');
+        $tr = $(this).closest('tr');
+        var data = $tr.children("th").map(function() {
+            return $(this).text();
+        }).get();
+
+        $('#delete_plain_cert').val(data[0]);
+    });
+}
+</script>

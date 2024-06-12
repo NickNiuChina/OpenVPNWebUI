@@ -184,7 +184,9 @@ $(document).ready(function() {
         $('#client_old_name').val(data[0]);
     });
 
+    // refresh every 30s
     setInterval(function() {
         tunTBclientStatus.ajax.reload();
     }, 30000);
+
 });
