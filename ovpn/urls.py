@@ -29,7 +29,7 @@ urlpatterns = [
     # openvpn client list
     path('<str:ovpn_service>/clients', views.clients, name='clients'),
     path('<str:ovpn_service>/generate_cert', views.generate_cert, name='generate_cert'),
-    path('<str:ovpn_service>/plain_certs', views.plain_certs, name='plain_certs'),
+    path('<str:ovpn_service>/plain_certs', views.PlainCertsView.as_view(), name='plain_certs'),
     path('<str:ovpn_service>/encrypt_certs', views.encrypt_certs, name='encrypt_certs'),
     
     # openvpn server logs
@@ -38,6 +38,6 @@ urlpatterns = [
 
     # System config urls
     path('system/config', views.system_config, name='system_config'),
-    path('show/settings', views.show_settings, name='settings'),
-    path('show/sessions', views.show_sessions, name='sessions'),
+    path('show/settings', views.ShowSettingsView.as_view(), name='settings'),
+    path('show/sessions', views.ShowSessionsView.as_view(), name='sessions'),
 ]

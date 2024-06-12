@@ -2,6 +2,7 @@ import subprocess
 
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views import View
 from django.contrib import messages
 from .models import Servers, ClientList, SystemCommonConfig
 from users.models import User, UserGroup
@@ -351,29 +352,39 @@ def generate_cert(request, ovpn_service=None):
     return render(request, "ovpn/generate_cert.html", context)
 
 
-def plain_certs(request, ovpn_service=None):
-    server = get_object_or_404(Servers, server_name=ovpn_service)
-    context = {"ovpn_service": ovpn_service}
-    plain_certs = []
-    
-    if platform.system().startswith("Linux"):
-        cert_files_dir = pathlib.Path(server.certs_dir)
-        if cert_files_dir.exists():
-            for f in list(cert_files_dir.iterdir()):
-                if f.is_file() and f.name.endswith(".log"):
-                    plain_certs.append({"log_name": f.name, "log_size": round(f.stat().st_size/1024, 1)})
-            if not plain_certs:
-                messages.error(request, "No OpenVPN logfiles found!")
-                return render(request, 'ovpn/server_logs.html', context)
+class PlainCertsView(View):
+    def __init__(self,  *args, **kwargs):
+        self.server = None
+        super().__init__(**kwargs)
+
+    def dispatch(self, request, *args, **kwargs):
+        server = get_object_or_404(Servers, server_name=kwargs.get("ovpn_service", None))
+        self.server = server
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, ovpn_service=None):
+        # server = get_object_or_404(Servers, server_name=ovpn_service)
+        context = {"ovpn_service": ovpn_service}
+        plain_certs = []
+
+        if platform.system().startswith("Linux"):
+            cert_files_dir = pathlib.Path(server.certs_dir)
+            if cert_files_dir.exists():
+                for f in list(cert_files_dir.iterdir()):
+                    if f.is_file() and f.name.endswith(".log"):
+                        plain_certs.append({"log_name": f.name, "log_size": round(f.stat().st_size/1024, 1)})
+                if not plain_certs:
+                    messages.error(request, "No OpenVPN logfiles found!")
+                    return render(request, 'ovpn/server_logs.html', context)
+                else:
+                    context.update({"ovpn_logs": plain_certs})
+                    return render(request, 'ovpn/server_logs.html', context)
             else:
-                context.update({"ovpn_logs": plain_certs})
+                messages.error(request, "The OpenVPN logs file dir do not exist!")
                 return render(request, 'ovpn/server_logs.html', context)
         else:
-            messages.error(request, "The OpenVPN logs file dir do not exist!")
-            return render(request, 'ovpn/server_logs.html', context)
-    else:
-        messages.error(request, "This APP should run on linux debian platform!")
-        return render(request, 'ovpn/ovpn_plain_certs.html')
+            messages.error(request, "This APP should run on linux debian platform!")
+            return render(request, 'ovpn/ovpn_plain_certs.html')
 
 
 def encrypt_certs(request, ovpn_service=None):
@@ -421,39 +432,52 @@ def system_config(request):
     return render(request, 'ovpn/system_config.html', {"form": form})
 
 
-def show_settings(request):
-    """List Django setting values
-
-    Args:
-        request (get): django request object
-
-    Returns:
-        HttpResponse: settings key/value(s)
+class ShowSettingsView(View):
     """
-    res = ''
-    from django.conf import settings
-    for name in dir(settings):
-        if not name.startswith("_"):
-            res += '</br>'
-            res += str(name)
-            res += ':'
-            res += str(getattr(settings, name))
-    return HttpResponse(res)
+    List Django setting
+    """
+    def get(self, request):
+        """List Django setting values
+
+        Args:
+            request (get): django request object
+
+        Returns:
+            HttpResponse: settings key/value(s)
+        """
+        res = ''
+        res_dict = {}
+        from django.conf import settings
+        for name in dir(settings):
+            if not name.startswith("_"):
+                res += '</br>'
+                res += str(name)
+                res += ':'
+                res += str(getattr(settings, name))
+                res_dict.update({str(name): str(getattr(settings, name))})
+        # return HttpResponse(res)
+        return JsonResponse(res_dict)
 
 
-def show_sessions(request):
+class ShowSessionsView(View):
     """ List django session values
-
-    Args:
-        request (get): django request object
-
-    Returns:
-        HttpResponse: session key/value(s)
     """
-    res = ''
-    for key, value in request.session.items():
-        res += '</br>'
-        res += str(key)
-        res += ':'
-        res += str(value)
-    return HttpResponse(res)
+    def get(self, request):
+        """ List django session values
+
+        Args:
+            request (get): django request object
+
+        Returns:
+            HttpResponse: json sessions
+        """
+        res = ''
+        res_dict = {}
+        for key, value in request.session.items():
+            res += '</br>'
+            res += str(key)
+            res += ':'
+            res += str(value)
+            res_dict.update({key: value})
+        # return HttpResponse(res)
+        return JsonResponse(res_dict)
