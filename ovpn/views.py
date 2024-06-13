@@ -1,6 +1,6 @@
 import subprocess
 
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, FileResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
@@ -17,6 +17,7 @@ from utils.OpenVPNParser import OpenVPNParser
 from utils.LogParser import LogParser
 from django.db.models import Q, CharField, Value
 import logging
+from io import StringIO
 
 
 def index(request):
@@ -393,14 +394,49 @@ class PlainCertsView(View):
             messages.error(request, "This APP should run on linux debian platform!")
             return render(request, 'ovpn/ovpn_plain_certs.html')
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, ovpn_service=None):
         # print(request.POST)
         # print("KKK: " + str(kwargs))
         # <QueryDict: {'csrfmiddlewaretoken': ['2slvJOiVBl75cOelzWCnBgCKBUAK3DRxWs54mHlL5xKJ7MXkfbwsfyIpkXenCTSw'], 'action': ['delete_plain_cert'], 'delete_plain_cert': ['client-openvpn-udp-tun-1194-test1.conf']}>
         # KKK: {'ovpn_service': 'openvpn-udp-tun-1194'}
+        action = request.POST.get('action', None)
+        if not action:
+            messages.error(request, "No post argument: action")
+            return redirect("ovpn:plain_certs", ovpn_service=self.server.server_name)
+        if action not in ["delete_plain_cert", "download_plain_cert"]:
+            messages.error(request, "Post argument: {} not supported!".format(action))
+            return redirect("ovpn:plain_certs", ovpn_service=self.server.server_name)           
+        if action == 'delete_plain_cert':
+            delete_plain_cert = request.POST.get("delete_plain_cert", '')
+            target_plain_cert = pathlib.Path(self.server.certs_dir, delete_plain_cert)
+            if target_plain_cert.is_file():
+                target_plain_cert.unlink()
+                messages.success(request, "Plain certification has been deleted successfully!")
+                return redirect("ovpn:plain_certs", ovpn_service=self.server.server_name)
+            else:
+                messages.error(request, "Plain certification not found!")
+                return redirect("ovpn:plain_certs", ovpn_service=self.server.server_name)
+        elif action == "download_plain_cert":
+            download_plain_cert = request.POST.get("download_plain_cert", '')
+            dpc = pathlib.Path(self.server.certs_dir, download_plain_cert)
+            if dpc.is_file():
+                # https://stackoverflow.com/questions/62745439/how-do-i-use-fileresponse-set-headers-in-my-django-application-to-enable-mp3
+                file = FileResponse(
+                    open(str(dpc), "rb"), as_attachment=True, filename=dpc.name,
+                )
+                return file
+            else:
+                filename = "error.txt"
+                str_stream = StringIO()
+                str_stream.write("The plain certification file is not found!")
+                str_stream.seek(0)
+                response = FileResponse(str_stream.read(), as_attachment=True, filename=filename)
+                return response
 
-        return redirect("ovpn:plain_certs", ovpn_service=self.server.server_name)
-
+        else:
+            return redirect("ovpn:plain_certs", ovpn_service=self.server.server_name)
+                
+        
 def encrypt_certs(request, ovpn_service=None):
     return render(request, 'ovpn/ovpn_encrypt_certs.html')
 

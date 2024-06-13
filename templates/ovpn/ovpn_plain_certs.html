@@ -62,8 +62,9 @@
 									<th>{{ cert.create_time }}</th>
 									<th>
 										<a href="{% url 'ovpn:plain_cert' ovpn_service=server.server_name cert_file=cert.cert_name %}" class="btn btn-primary">View</a>
-										<a href="javascript:void(0);" class="btn btn-danger delete_cert_file">Delete</a>
-										<a href="{% url 'ovpn:plain_certs' ovpn_service=server.server_name %}" class="btn btn-primary">Download</a>
+										<a href="javascript:void(0);" class="btn btn-danger delete_plain_cert">Delete</a>
+										<a href="javascript:void(0);" class="btn btn-primary download_plain_cert">Download</a>
+										<a href="{% url 'ovpn:plain_certs' ovpn_service=server.server_name %}" class="btn btn-primary">Download2</a>
 									</th>
 								</tr>
 							{%  endfor %}
@@ -111,18 +112,8 @@
 </div>
 {% endblock %}
 
-
+{% block page_js %}
 <script>
-$(document).ready(function() {
-    // Plain cert page
-    $('tbody').on('click', '.delete_cert_file', function() {
-        $('#delete_plain_cert_modal').modal('show');
-        $tr = $(this).closest('tr');
-        var data = $tr.children("th").map(function() {
-            return $(this).text();
-        }).get();
-
-        $('#delete_plain_cert').val(data[0]);
-    });
-}
+	window.csrftoken="{{ csrf_token }}";
 </script>
+{% endblock %}

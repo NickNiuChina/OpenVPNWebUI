@@ -853,8 +853,8 @@ $(document).ready(function() {
         });
     });
 
-    // Plain cert page
-    $('tbody').on('click', '.delete_cert_file', function() {
+    // Plain cert page: delete a plain cert
+    $('tbody').on('click', '.delete_plain_cert', function() {
         // alert("debug");
         $('#delete_plain_cert_modal').modal('show');
         $tr = $(this).closest('tr');
@@ -865,6 +865,19 @@ $(document).ready(function() {
         $('#delete_plain_cert').val(data[0]);
     });
 
+    // Plain cert page: download a plain cert
+    $('tbody').on('click', '.download_plain_cert', function() {
+        // alert("debug");
+        $tr = $(this).closest('tr');
+        var data = $tr.children("th").map(function() {
+            return $(this).text();
+        }).get();
+        var cert
+        alert(data[0]);
+        $.post("", { 'csrfmiddlewaretoken': window.csrftoken, 'action': "download_plain_cert", "download_plain_cert": data[0] }, function(result) {
+            // console.log(result)
+        });
+    });
 });
 
 $(document).ready(function() {
