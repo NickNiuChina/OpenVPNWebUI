@@ -64,7 +64,6 @@
 										<a href="{% url 'ovpn:plain_cert' ovpn_service=server.server_name cert_file=cert.cert_name %}" class="btn btn-primary">View</a>
 										<a href="javascript:void(0);" class="btn btn-danger delete_plain_cert">Delete</a>
 										<a href="javascript:void(0);" class="btn btn-primary download_plain_cert">Download</a>
-										<a href="{% url 'ovpn:plain_certs' ovpn_service=server.server_name %}" class="btn btn-primary">Download2</a>
 									</th>
 								</tr>
 							{%  endfor %}

@@ -872,10 +872,45 @@ $(document).ready(function() {
         var data = $tr.children("th").map(function() {
             return $(this).text();
         }).get();
-        var cert
-        alert(data[0]);
-        $.post("", { 'csrfmiddlewaretoken': window.csrftoken, 'action': "download_plain_cert", "download_plain_cert": data[0] }, function(result) {
-            // console.log(result)
+        // alert(data[0]);
+        var plain_cert_filename = data[0];
+        $.ajax({
+            type: "post",
+            url: "",
+            data: { 'csrfmiddlewaretoken': window.csrftoken, 'action': "download_plain_cert", "download_plain_cert": plain_cert_filename },
+            cache: false,
+            xhr: function() {
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 2) {
+                        if (xhr.status == 200) {
+                            xhr.responseType = "blob";
+                        } else {
+                            xhr.responseType = "text";
+                        }
+                    }
+                };
+                return xhr;
+            },
+            success: function(data) {
+                //Convert the Byte Data to BLOB object.
+                var blob = new Blob([data], { type: "application/octetstream" });
+
+                //Check the Browser type and download the File.
+                var isIE = false || !!document.documentMode;
+                if (isIE) {
+                    window.navigator.msSaveBlob(blob, plain_cert_filename);
+                } else {
+                    var url = window.URL || window.webkitURL;
+                    link = url.createObjectURL(blob);
+                    var a = $("<a />");
+                    a.attr("download", plain_cert_filename);
+                    a.attr("href", link);
+                    $("body").append(a);
+                    a[0].click();
+                    $("body").remove(a);
+                }
+            }
         });
     });
 });
