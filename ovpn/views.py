@@ -435,7 +435,18 @@ class PlainCertsView(View):
 
         else:
             return redirect("ovpn:plain_certs", ovpn_service=self.server.server_name)
-                
+
+
+class PlainCertView(View):
+    def __init__(self,  *args, **kwargs):
+        self.server = None
+        super().__init__(**kwargs)
+
+    def dispatch(self, request, *args, **kwargs):
+        server = get_object_or_404(Servers, server_name=kwargs.get("ovpn_service", None))
+        self.server = server
+        return super().dispatch(request, *args, **kwargs)
+                    
         
 def encrypt_certs(request, ovpn_service=None):
     return render(request, 'ovpn/ovpn_encrypt_certs.html')
