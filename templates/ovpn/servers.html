@@ -96,6 +96,11 @@
 									{% endif %}
 									<th>
 										<a href="{% url 'ovpn:server_update' server.id %}" class="btn btn-primary">Edit</a>
+										{% if server.running_status == 1 %}
+											<a href="javascript:void(0);" class="btn btn-danger stop_ovpn_service">Stop service</a>
+										{% else %}
+											<a href="javascript:void(0);" class="btn btn-primary start_ovpn_service">Start service</a>
+										{% endif %}
 									</th>
 								</tr>
 							{%  endfor %}
