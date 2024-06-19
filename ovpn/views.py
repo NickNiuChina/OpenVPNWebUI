@@ -106,14 +106,37 @@ def servers(request):
         return_servers.append(server)
     form = ServersForm()    
     if request.method == "POST":
+        
+        action = request.POST.get('action', '').strip()
+        s_uuid = request.POST.get('s_uuid', "").strip()
+        
+        if action:
+            try:
+                sid = uuid.UUID(s_uuid)
+            except:
+                sid = ''
+            if sid:
+                server = Servers.objects.filter(id=sid)
+                if not server:
+                    messages.error(request, "UUID has not been found in record!")
+                    return redirect("ovpn:servers")
+            else:
+                messages.error(request, "Please provide a valid uuid!")
+                return redirect("ovpn:servers")
+        
+            if action == "start":
+                pass
+            elif action == "stop":
+                print("XXXXXXXXXXXXXX: stop serice")
+            
         formset = ServersForm(request.POST)
         if formset.is_valid():
             formset.save()
             messages.success(request, "New server has been added successfully!")
         else:
             messages.error(request, formset.errors)
-        form = ServersForm()
-        return render(request, 'ovpn/servers.html', {"servers": servers, "form": form})
+        # return render(request, 'ovpn/servers.html', {"servers": servers, "form": form})
+        return redirect("ovpn:servers")
     else:
         return render(request, 'ovpn/servers.html', {"servers": return_servers, "form": form})
 
@@ -140,7 +163,7 @@ def server_delete(request):
             if sid:
                 server = Servers.objects.filter(id=sid)
                 if not server:
-                    messages.error(request, "This uuid is found in record!")
+                    messages.error(request, "This uuid has not been found in record!")
                     return redirect("ovpn:servers")
                 else:
                     Servers.objects.filter(id=sid).delete()
