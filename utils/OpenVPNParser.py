@@ -57,6 +57,38 @@ class OpenVPNParser(object):
                 results.update({"status": 0})
                 return results
 
+
+    @classmethod
+    def change_openvpn_running_status(cls, server=None, op=None) -> bool:
+        if not platform.system().startswith("Linux"):
+            return False
+        if not server or not op:
+            return False
+        startup_service = server.startup_service
+        if not startup_service:
+            return False
+        if not op in ['start', 'stop', 'restart']:
+            return False   
+        if str(server.startup_type) == "1":
+            try:
+                res = subprocess.run(["systemctl", op, startup_service], capture_output = True)
+                if res.returncode == 0:
+                    return True
+                else:
+                    return False
+            except:
+                return False
+            
+        else:
+            try:
+                res = subprocess.run([startup_service, op], capture_output = True)
+                if res.returncode == 0:
+                    return True
+                else:
+                    return False
+            except:
+                return False
+
 if __name__ == "__main__":
     print("OpenVPN version: " + OpenVPNParser.get_openvpn_version())
 

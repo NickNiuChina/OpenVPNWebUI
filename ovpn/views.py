@@ -116,19 +116,24 @@ def servers(request):
             except:
                 sid = ''
             if sid:
-                server = Servers.objects.filter(id=sid)
+                server = Servers.objects.get(id=sid)
                 if not server:
                     messages.error(request, "UUID has not been found in record!")
                     return redirect("ovpn:servers")
+                
+                if action in ["start", "stop", "restart"]:
+                    res = OpenVPNParser.change_openvpn_running_status(server=server, op=action)
+                    if res:
+                        messages.success(request, 'OpenVPN service {} successfully.'.format(action))
+                    else:
+                        messages.error(request, 'OpenVPN service failed to {}!'.format(action))
+                else:
+                    messages.error(request, "Operation not allowed.")
             else:
                 messages.error(request, "Please provide a valid uuid!")
                 return redirect("ovpn:servers")
+            return redirect("ovpn:servers")
         
-            if action == "start":
-                pass
-            elif action == "stop":
-                print("XXXXXXXXXXXXXX: stop serice")
-            
         formset = ServersForm(request.POST)
         if formset.is_valid():
             formset.save()
