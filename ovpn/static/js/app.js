@@ -5,20 +5,21 @@ $(document).ready(function() {
     var cn;
     var storename;
 
-    // const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
-    // const appendAlert = (message, type) => {
-    //     const wrapper = document.createElement('div');
-    //     wrapper.innerHTML = [
-    //         `<div class="alert alert-${type} alert-dismissible fade show " role="alert">`,
-    //         `   <div>${message}</div>`,
-    //         '   <button type="button" class="close" data-dismiss="alert" aria-label="Close">',
-    //         '<span aria-hidden="true">&times;</span>',
-    //         '</button>',
-    //         '</div>'
-    //     ].join('\n');
+    // Result message
+    const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+    const appendAlert = (message, type) => {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = [
+            `<div class="alert alert-${type} alert-dismissible fade show " role="alert">`,
+            `   <div>${message}</div>`,
+            '   <button type="button" class="close" data-dismiss="alert" aria-label="Close">',
+            '<span aria-hidden="true">&times;</span>',
+            '</button>',
+            '</div>'
+        ].join('\n');
 
-    //     alertPlaceholder.append(wrapper);
-    // };
+        alertPlaceholder.append(wrapper);
+    };
 
     function formatDate(date) {
         var d = new Date(date),
@@ -88,18 +89,41 @@ $(document).ready(function() {
             return $(this).text();
         }).get();
 
+        var current_ob = $(this).closest('tr').find(".server_running_status");
+
         var s_uuid = data[0];
         // alert(sid);
         $.post("", { 'csrfmiddlewaretoken': window.csrftoken, 'action': "stop", "s_uuid": s_uuid }, function(result) {
             // alert("debug in jQuery post");
+            // window.location.reload();
+            // $tr.find(".server_running_status").addClass("text-green").removeClass("text-red");
+            if (result['result'] == 'success') {
+                current_ob.removeClass("text-green").addClass("text-red");
+            }
+            appendAlert(result['message'], result['result']);
         });
     });
 
     // Post to stop an OpenVPN service
     $('tbody').on('click', '.start_ovpn_service', function() {
         // alert("debug");
-        $.post("", { 'csrfmiddlewaretoken': window.csrftoken, 'action': "start" }, function(result) {
+        $tr = $(this).closest('tr');
+        var data = $tr.children("th").map(function() {
+            return $(this).text();
+        }).get();
+
+        var current_ob = $(this).closest('tr').find(".server_running_status");
+
+        var s_uuid = data[0];
+        // alert(sid);
+        $.post("", { 'csrfmiddlewaretoken': window.csrftoken, 'action': "start", "s_uuid": s_uuid }, function(result) {
             // alert("debug in jQuery post");
+            // window.location.reload();
+            // $tr.find(".server_running_status").addClass("text-red").removeClass("text-green");
+            if (result['result'] == 'success') {
+                current_ob.removeClass("text-red").addClass("text-green");
+            }
+            appendAlert(result['message'], result['result']);
         });
     });
 
