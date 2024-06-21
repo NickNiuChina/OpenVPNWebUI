@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}OpenVPN server config{% endblock %}
+{% block content %}
+
+{# Content Wrapper. Contains page content #}
+<div class="content-wrapper">
+
+	{# Content Header (Page header) #}
+	<div class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1 class="m-0">OpenVPN server configuration</h1>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="{% url 'ovpn:index' %}">Home</a></li>
+						<li class="breadcrumb-item active">Main</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+	{#  content-header END #}
+
+	<section class="content">
+		<div class="container-fluid">
+			<div class="row">
+			<form method="post" class="form-inline mb-2 col-sm-12">
+				{% csrf_token %}
+				<div class="form-group col-sm-2">
+				  <label class="col-sm-7" for="inlineFormInputName2">Show lines:</label>
+				  <select type="select" name="log_size" class="form-control custom-select col-sm-5 " id="inlineFormInputName2" placeholder="lines">
+					<option value="300" {% if log_size == 300 %} selected{% endif %}>300</option>
+					<option value="1000" {% if log_size == 1000 %} selected{% endif %} >1000</option>
+					<option value="3000" {% if log_size == 3000 %} selected{% endif %}>3000</option>
+					<option value="-1" {% if log_size == -1 %} selected {% endif %} >All</option>
+				  </select>
+				</div>
+
+				<button type="submit" class="btn btn-primary col-sm-1 mr-4">Confirm</button>
+				<a href="{% url 'ovpn:servers' %}" class="btn btn-primary col-sm-2 mr-4">Return</a>
+			</form>
+			</div>
+
+			{% if messages %}
+				<ul class="flashes">
+				{% for message in messages %}
+					<div class="text-{{ message.tags }}">
+						{{ message }}
+					</div>
+			{% endfor %}
+				</ul>
+			{% endif %}
+
+			<div class="card">
+			    <div class="card-header">
+			    </div> {# /.card-header #}
+			    <div class="card-body">
+
+					<div class="card card-default">
+					  <div class="card-header with-border">
+						<h3 class="card-title">OpenVPN Server log</h3>
+						  <div class="pull-right card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse">
+							  <i class="fa fa-minus"></i></button>
+						  </div>
+					  </div>
+					  <div class="card-body">
+						<form role="form">
+						  <div class="form-group" >
+							<textarea type="text" class="form-control my-textarea" name="Logs"
+							 id="Logs" spellcheck="false" rows="15">
+{% if log_content %}{% for line in log_content %}
+{{ line }}{% endfor %}{% endif %}
+							</textarea>
+						  </div>
+						</form>
+						<span id="helpBlock" class="text-muted">{% if log_size > 0 %}Last {{ log_size }} {% else %} All {% endif %} lines of {{log_file}}</span>
+					  </div>
+					  <!-- /.card-body -->
+					</div>
+					<!--script>
+					  createEditor("Logs", "700px", "clouds", "ovpn", true);
+					</script-->
+
+
+
+			    </div>
+			</div>
+		</div>
+
+
+	</section>
+</div>
+<script src="{% static 'js/custom.js' %}"></script>
+<script src="{% static 'js/ace/ace.js' %}"></script>
+{% endblock %}

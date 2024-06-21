@@ -213,6 +213,48 @@ def server_update(request, sid):
             return render(request, 'ovpn/server_update.html', context)
 
 
+class ServerConfigView(View):
+    def __init__(self,  *args, **kwargs):
+        self.server = None
+        super().__init__(**kwargs)
+
+    def dispatch(self, request, *args, **kwargs):
+        server = get_object_or_404(Servers, id=kwargs.get("sid", None))
+        self.server = server
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, sid=None):
+        # server = get_object_or_404(Servers, server_name=ovpn_service)
+        context = {"sid": sid, "server": self.server}
+        plain_certs = []
+
+        if platform.system().startswith("Linux"):
+            cert_files_dir = pathlib.Path(self.server.certs_dir)
+            if cert_files_dir.exists():
+                for f in list(cert_files_dir.iterdir()):
+                    if f.is_file() and (f.name.endswith((".conf", ".ovpn"))):
+                        plain_certs.append(
+                                {
+                                "cert_name": f.name, 
+                                "cert_size": round(f.stat().st_size/1024, 1),
+                                "create_time": datetime.datetime.fromtimestamp(f.stat().st_ctime).strftime("%Y-%m-%d_%H:%M:%S")
+                                }
+                            )
+                        
+                if not plain_certs:
+                    messages.error(request, "No OpenVPN certification files found!")
+                    return render(request, 'ovpn/ovpn_plain_certs.html', context)
+                else:
+                    context.update({"plain_certs": plain_certs})
+                    return render(request, 'ovpn/ovpn_plain_certs.html', context)
+            else:
+                messages.error(request, "The OpenVPN certifications file dir does not exist!")
+                return render(request, 'ovpn/ovpn_plain_certs.html', context)
+        else:
+            messages.error(request, "This APP should run on linux debian platform!")
+            return render(request, 'ovpn/server_config.html')
+
+
 def server_logs(request, ovpn_service=None):
     """_summary_
 

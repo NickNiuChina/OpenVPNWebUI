@@ -67,9 +67,7 @@
 								<tr>
 									<th>OpenVPN service UUID</th>
 									<th>Service</th>
-									<th>startup</th>
 									<th>status</th>
-									<th>configuration dir</th>
 									<th>Running status</th>
 									<th>Operation</th>
 								</tr>
@@ -80,7 +78,6 @@
 								<tr>
 									<th>{{ server.id }}</th>
 									<th> {{server.server_name}}</th>
-									<th>{{server.startup_service}}</th>
 									<th>
 										{% if server.managed == 1 %}
 											managed
@@ -88,7 +85,6 @@
 											unmanaged
 										{% endif %}
 									</th>
-									<th>{{server.configuration_dir}}</th>
 									<th>
 									{% if server.running_status == 1 %}
 										<i class="fa server_running_status fa-circle text-green"></i>
@@ -97,6 +93,7 @@
 									{% endif %}
 									<th>
 										<a href="{% url 'ovpn:server_update' server.id %}" class="btn btn-primary">Edit</a>
+										<a href="{% url 'ovpn:server_config' server.id %}" class="btn btn-primary">Config</a>
 										{% if server.running_status == 1 %}
 											<a href="javascript:void(0);" class="btn btn-danger stop_ovpn_service">Stop</a>
 										{% else %}

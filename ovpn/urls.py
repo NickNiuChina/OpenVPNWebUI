@@ -25,6 +25,7 @@ urlpatterns = [
     path('servers', views.servers, name='servers'),
     path('servers/delete', views.server_delete, name='server_delete'),
     path('servers/update/<uuid:sid>/', views.server_update, name='server_update'),
+    path('servers/config/<uuid:sid>/', views.ServerConfigView.as_view(), name='server_config'),
     
     # openvpn client list
     path('<str:ovpn_service>/clients', views.clients, name='clients'),
