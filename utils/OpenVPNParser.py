@@ -3,8 +3,19 @@ import platform
 
 
 class OpenVPNParser(object):
+    """ 
+    Parse OpenVPN related information
+    """
     @classmethod
     def get_openvpn_version(cls, executor=None) -> str:
+        """ Get OpenVPN version
+
+        Args:
+            executor (str, optional): Cmd to get openvpn version. Defaults to None.
+
+        Returns:
+            str: OpenVPN version string
+        """
         if not platform.system().startswith("Linux"):
             return ""
         try:            
@@ -25,6 +36,14 @@ class OpenVPNParser(object):
 
     @classmethod
     def get_openvpn_running_status(cls, server=None) -> dict:
+        """ Get OpenVPN running status
+
+        Args:
+            server (server, optional): A server instance which has an openvpn server information.
+
+        Returns:
+            dict: Running status info, dict format.
+        """
         results = {}
         if not platform.system().startswith("Linux"):
             return results
@@ -60,6 +79,15 @@ class OpenVPNParser(object):
 
     @classmethod
     def change_openvpn_running_status(cls, server=None, op=None) -> bool:
+        """ Change OpenVPN running status
+
+        Args:
+            server (server, optional): _description_. Defaults to None.
+            op (str, optional): the operation type, start, restart, stop. Defaults to None.
+
+        Returns:
+            bool: Bool
+        """
         if not platform.system().startswith("Linux"):
             return False
         if not server or not op:
