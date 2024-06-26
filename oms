@@ -65,7 +65,14 @@ def perform_db_migrate():
     logging.info("Check database structure change ...")
     logging.info("Migrate model change to database ...")
     try:
+        management.call_command("makemigrations")
+        management.call_command("makemigrations", "ovpn")
+        management.call_command("makemigrations", "users")
+        management.call_command("makemigrations", "auth")
         management.call_command('migrate')
+        management.call_command("migrate", "ovpn")
+        management.call_command("migrate", "users")
+        management.call_command("migrate", "auth")
     except Exception:
         logging.error('Perform migrate failed, exit', exc_info=True)
         sys.exit(11)
@@ -139,7 +146,7 @@ def start_services():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description="""
-        Jumpserver service control tools;
+        OpenVPNWebUI service control tools;
 
         Example: \r\n
 
