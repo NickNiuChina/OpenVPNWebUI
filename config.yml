@@ -7,7 +7,8 @@ DEBUG: True
 
 # DEBUG, INFO, WARNING, ERROR, CRITICAL can set. See https://docs.djangoproject.com/en/1.10/topics/logging/
 LOG_LEVEL: DEBUG
-LOG_FILES: logs/OpenVPNWEBUI.log
+LOG_FILES: /var/log/apache2/OpenVPNWEBUI.log
+REQ_LOG_FILES: /var/log/apache2/django_request.log
 
 # Session expiration setting, Default 1 hour, Also set expired on on browser close
 SESSION_COOKIE_AGE: 3600

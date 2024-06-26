@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+import platform
 from django.contrib.messages import constants as messages
 # read user setting from config.yml
 from .conf import ConfigManager
@@ -26,7 +27,10 @@ CONFIG = ConfigManager.load_user_config()
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY') or 'django-insecure-803cf=uonr+vx87tjd5)xd8qxn0mfnh5h=9cwvqk!4=-+u+@a7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = CONFIG.DEBUG or False
+if platform.system().startswith("Windows"):
+    DEBUG = False
+else:
+    DEBUG = CONFIG.DEBUG or False
 
 ALLOWED_HOSTS = ['*', '127.0.0.1']
 
@@ -150,6 +154,12 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 60 * 60 * 4 
 
 # logs
+if DEBUG:
+    main_log_file = "logs/OpenVPNWEBUI.log"
+    req_log_file = "logs/django_request.log"
+else:
+    main_log_file = CONFIG.LOG_FILES
+    req_log_file = CONFIG.REQ_LOG_FILES
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -182,7 +192,7 @@ LOGGING = {
             'level':CONFIG.LOG_LEVEL or "INFO",
             'class':'logging.handlers.RotatingFileHandler',
             # 'class':'logging.handlers.TimedRotatingFileHandler',
-            'filename': CONFIG.LOG_FILES,
+            'filename': main_log_file,
             'maxBytes': 1024*1024*5, # 5 MB
             # 'when': 'midnight',
             'backupCount': 10,
@@ -191,7 +201,7 @@ LOGGING = {
         'request_handler': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/django_request.log',
+            'filename': req_log_file,
             'maxBytes': 1024*1024*5, # 5 MB
             'backupCount': 10,
             'formatter':'standard',
