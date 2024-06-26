@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY') or 'django-insecure-803cf=uonr+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if platform.system().startswith("Windows"):
-    DEBUG = False
+    DEBUG = True
 else:
     DEBUG = CONFIG.DEBUG or False
 
