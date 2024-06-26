@@ -12,35 +12,15 @@ import django
 from django.core import management
 from django.db.utils import OperationalError
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-APP_DIR = os.path.join(BASE_DIR, 'apps')
+from utils.common import make_dirs
 
-os.chdir(APP_DIR)
-sys.path.insert(0, APP_DIR)
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "jumpserver.settings")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# sys.path.insert(0, BASE_DIR)
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "OpenVPNWebUI.settings")
 django.setup()
 
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
-
-try:
-    from jumpserver import const
-
-    __version__ = const.VERSION
-except ImportError as e:
-    print("Not found __version__: {}".format(e))
-    print("Python is: ")
-    logging.info(sys.executable)
-    __version__ = 'Unknown'
-    sys.exit(1)
-
-try:
-    from jumpserver.const import CONFIG
-    from common.utils.file import download_file
-    from common.utils import make_dirs
-except ImportError as e:
-    print("Import error: {}".format(e))
-    print("Could not find config file, `cp config_example.yml config.yml`")
-    sys.exit(1)
 
 os.environ["PYTHONIOENCODING"] = "UTF-8"
 
@@ -52,8 +32,8 @@ logging.basicConfig(
 logger = logging.getLogger()
 
 try:
-    make_dirs(os.path.join(BASE_DIR, "data", "static"))
-    make_dirs(os.path.join(BASE_DIR, "data", "media"))
+    make_dirs(os.path.join(BASE_DIR, "logs"))
+    # make_dirs(os.path.join(BASE_DIR, "media"))
 except:
     pass
 
@@ -109,20 +89,6 @@ def compile_i18n_file():
     logging.info("Compile i18n files done")
 
 
-def download_ip_db():
-    db_base_dir = os.path.join(APP_DIR, 'common', 'utils', 'ip')
-    db_path_url_mapper = {
-        ('geoip', 'GeoLite2-City.mmdb'): 'https://jms-pkg.oss-cn-beijing.aliyuncs.com/ip/GeoLite2-City.mmdb',
-        ('ipip', 'ipipfree.ipdb'): 'https://jms-pkg.oss-cn-beijing.aliyuncs.com/ip/ipipfree.ipdb'
-    }
-    for p, src in db_path_url_mapper.items():
-        path = os.path.join(db_base_dir, *p)
-        if os.path.isfile(path) and os.path.getsize(path) > 1000:
-            continue
-        print("Download ip db: {}".format(path))
-        download_file(src, path)
-
-
 def install_builtin_applets():
     logging.info("Install builtin applets")
     try:
@@ -140,7 +106,6 @@ def prepare():
     check_database_connection()
     upgrade_db()
     expire_caches()
-    download_ip_db()
     install_builtin_applets()
 
 
