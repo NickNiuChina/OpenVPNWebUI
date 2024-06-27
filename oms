@@ -20,6 +20,10 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "OpenVPNWebUI.settings")
 django.setup()
 
+from users.models import User
+from ovpn.models import SystemCommonConfig
+
+
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 
 os.environ["PYTHONIOENCODING"] = "UTF-8"
@@ -95,25 +99,21 @@ def compile_i18n_file():
     management.call_command('compilemessages', verbosity=0, interactive=False)
     logging.info("Compile i18n files done")
 
-
-def install_builtin_applets():
-    logging.info("Install builtin applets")
-    try:
-        management.call_command('install_builtin_applets', verbosity=0)
-    except Exception as e:
-        logging.error("Install builtin applets err: {}".format(e))
+def perform_db_initial():
+    User.initial()
+    SystemCommonConfig.initial()
 
 
 def upgrade_db():
     collect_static()
     perform_db_migrate()
+    perform_db_initial()
 
 
 def prepare():
     check_database_connection()
     upgrade_db()
     expire_caches()
-    install_builtin_applets()
 
 
 def start_services():
@@ -155,7 +155,7 @@ if __name__ == '__main__':
     )
     parser.add_argument(
         'action', type=str,
-        choices=("start", "stop", "restart", "status", "upgrade_db", "collect_static"),
+        choices=("start", "stop", "restart", "status", "upgrade_db", "collect_static", "prepare"),
         help="Action to run"
     )
     parser.add_argument(
@@ -173,6 +173,8 @@ if __name__ == '__main__':
     if action == "upgrade_db":
         upgrade_db()
     elif action == "collect_static":
-        collect_static()
+        collect_static()    
+    elif action == "prepare":
+        prepare()
     else:
         start_services()
