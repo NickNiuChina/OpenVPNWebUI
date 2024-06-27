@@ -1,4 +1,5 @@
 1. Install openvpn and download easyrsa v3.2.0
+  
 
 2. prepare vars and generate files
 

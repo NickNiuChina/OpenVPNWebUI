@@ -10,4 +10,9 @@
 
 5. log dir chown
     chown www-data:www-data /var/log/apach2/ -R
+
+6. Enable some modules
+    a2enmod rewrite
+    a2enmod proxy
+    a2enmod ssl
     
