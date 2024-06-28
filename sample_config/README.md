@@ -1,5 +1,20 @@
 1. Install openvpn and download easyrsa v3.2.0
-  
+  wget https://github.com/OpenVPN/easy-rsa/releases/download/v3.2.0/EasyRSA-3.2.0.tgz
+OR: git clone https://github.com/OpenVPN/easy-rsa.git
+tar xf EasyRSA-3.2.0.tgz
+mv EasyRSA-3.2.0 easyrsa
+cd easyrsa
+cp vars.example vars
+vim vars
+set_var EASYRSA_REQ_COUNTRY     "CN"
+set_var EASYRSA_REQ_PROVINCE    "JIANGSU"
+set_var EASYRSA_REQ_CITY        "SUZHOU"
+set_var EASYRSA_REQ_ORG         "Better_Qualtity"
+set_var EASYRSA_REQ_EMAIL       "nick_niu@hotmail.com"
+set_var EASYRSA_REQ_OU          "BQ-LTD"
+set_var EASYRSA_NO_PASS 1
+set_var EASYRSA_CA_EXPIRE       3650
+set_var EASYRSA_CERT_EXPIRE     3650
 
 2. prepare vars and generate files
 
@@ -22,7 +37,9 @@ mkdir ccd
   # dh.pem
   # server-xxx.key
   # server-xxx.crt
-  
+  # pw-file
+  # learn-*
+  chmod 644 pw-file
   chmod +x learn-address-script-wrapper
   ```
 
