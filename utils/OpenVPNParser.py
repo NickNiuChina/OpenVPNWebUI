@@ -107,6 +107,7 @@ class OpenVPNParser(object):
         if str(server.startup_type) == "1":
             try:
                 res = subprocess.run(["systemctl", op, startup_service], capture_output = True)
+                logger.info("Run system command now: {} {} {}".format("systemctl", op, startup_service))
                 if res.returncode == 0:
                     logger.info("Successfully {} the openvpn service.".format(op))
                     return True
