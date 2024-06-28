@@ -2,7 +2,7 @@ import subprocess
 import platform
 import logging
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 class OpenVPNParser(object):
@@ -20,6 +20,7 @@ class OpenVPNParser(object):
             str: OpenVPN version string
         """
         if not platform.system().startswith("Linux"):
+            logger.info("This app is not running on linux platform now. Skip get openvpn version.")
             return ""
         try:            
             if not executor:
@@ -49,6 +50,7 @@ class OpenVPNParser(object):
         """
         results = {}
         if not platform.system().startswith("Linux"):
+            logger.info("This app is not running on linux platform now. Skip get openvpn running status.")
             return results
         if not server:
             return results
@@ -63,7 +65,8 @@ class OpenVPNParser(object):
                     return results
                 else:
                     results.update ({"status": 0})
-            except:
+            except Exception as e:
+                logger.error("Failed to get openvpn running status: {}".format(str(e)))
                 results.update({"status": 0})
                 return results
             
@@ -92,6 +95,7 @@ class OpenVPNParser(object):
             bool: Bool
         """
         if not platform.system().startswith("Linux"):
+            logger.info("This app is not running on linux platform now. Skip start/stop openvpn service.")
             return False
         if not server or not op:
             return False
@@ -107,6 +111,7 @@ class OpenVPNParser(object):
                     logger.info("Successfully {} the openvpn service.".format(op))
                     return True
                 else:
+                    logger.info("Failed to {} the openvpn service.".format(op))
                     return False
             except Exception as e:
                 logger.error("Failed to {} ovpn service: {}".format(op, str(e)) )
