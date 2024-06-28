@@ -1,5 +1,8 @@
 import subprocess
 import platform
+import logging
+
+logger = logging.getLogger()
 
 
 class OpenVPNParser(object):
@@ -101,10 +104,12 @@ class OpenVPNParser(object):
             try:
                 res = subprocess.run(["systemctl", op, startup_service], capture_output = True)
                 if res.returncode == 0:
+                    logger.info("Successfully {} the openvpn service.".format(op))
                     return True
                 else:
                     return False
-            except:
+            except Exception as e:
+                logger.error("Failed to {} ovpn service: {}".format(op, str(e)) )
                 return False
             
         else:
