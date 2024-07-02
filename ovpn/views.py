@@ -426,6 +426,21 @@ def generate_cert(request, ovpn_service=None):
     return render(request, "ovpn/generate_cert.html", context)
 
 
+class GenerateCertView(View):
+    def __init__(self,  *args, **kwargs):
+        self.server = None
+        super().__init__(**kwargs)
+
+    def dispatch(self, request, *args, **kwargs):
+        server = get_object_or_404(Servers, server_name=kwargs.get("ovpn_service", None))
+        self.server = server
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, ovpn_service=None):
+        context = {"ovpn_service": ovpn_service}
+        return render(request, "ovpn/generate_cert.html", context)
+    
+
 class PlainCertsView(View):
     def __init__(self,  *args, **kwargs):
         self.server = None
