@@ -127,9 +127,35 @@ $(document).ready(function() {
         });
     });
 
-    /* **********************************************
+    /* **********************************************************************************************
         OpenVPN serivce pages, like clients list or certs .......
-    ********************************************** */
+    *********************************************************************************************** */
+
+ /* *********************************************
+       Generate cert page
+    ********************************************* */
+    // update the filename in the input
+    $(".custom-file-req > input").on("change", function() {
+        var filePath = $(this).val();
+        if (filePath.length > 0) {
+            var arr = filePath.split('\\');
+            var fileName = arr[arr.length - 1];
+            $('.req-file-label').text(fileName);
+        } else {
+            $('.req-file-label').text("Please select Req file to upload");
+        }
+    });
+    $(".custom-file-encrypt-req > input").on("change", function() {
+        var filePath = $(this).val();
+        if (filePath.length > 0) {
+            var arr = filePath.split('\\');
+            var fileName = arr[arr.length - 1];
+            $('.encrypt-req-file-label').text(fileName);
+        } else {
+            $('.encrypt-req-file-label').text("Please select Req file to upload");
+        }
+    });
+
     // Plain cert page: delete a plain cert
     $('tbody').on('click', '.delete_plain_cert', function() {
         // alert("debug");

@@ -419,13 +419,6 @@ def clients(request, ovpn_service=None):
         return render(request, 'ovpn/clients.html', context)
 
 
-def generate_cert(request, ovpn_service=None):
-    
-    ovpn_service = get_object_or_404(Servers, server_name=ovpn_service)
-    context = {"ovpn_service": ovpn_service}
-    return render(request, "ovpn/generate_cert.html", context)
-
-
 class GenerateCertView(View):
     def __init__(self,  *args, **kwargs):
         self.server = None
@@ -439,7 +432,27 @@ class GenerateCertView(View):
     def get(self, request, ovpn_service=None):
         context = {"ovpn_service": ovpn_service}
         return render(request, "ovpn/generate_cert.html", context)
-    
+
+    def post(self, request, ovpn_service=None):
+        action = request.POST.get('action', None)
+        if not action:
+            messages.error(request, "No post argument assignment: action=?")
+            return redirect("ovpn:generate_cert", ovpn_service=self.server.server_name)
+        if action not in ["generate_cert_by_cn", "generate_cert_by_req", "generate_cert_by_encrypt_req"]:
+            messages.error(request, "Post argument: not supported: action={}".format(action))
+            return redirect("ovpn:plain_certs", ovpn_service=self.server.server_name)
+        # Generate cert by
+        if action == "generate_cert_by_cn":
+            pass
+
+        if action == "generate_cert_by_req":
+            pass
+
+        if action == "generate_cert_by_encrypt_req":
+            pass
+
+        return redirect("ovpn:plain_certs", ovpn_service=self.server.server_name)
+
 
 class PlainCertsView(View):
     def __init__(self,  *args, **kwargs):
