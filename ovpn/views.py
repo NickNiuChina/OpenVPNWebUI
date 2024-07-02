@@ -443,6 +443,7 @@ class GenerateCertView(View):
             return redirect("ovpn:plain_certs", ovpn_service=self.server.server_name)
         # Generate cert by
         if action == "generate_cert_by_cn":
+            print("Here")
             pass
 
         if action == "generate_cert_by_req":
