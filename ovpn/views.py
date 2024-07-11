@@ -243,13 +243,13 @@ class ServerConfigView(View):
                         
                 if not plain_certs:
                     messages.error(request, "No OpenVPN certification files found!")
-                    return render(request, 'ovpn/ovpn_plain_certs.html', context)
+                    return render(request, 'ovpn/server_config.html', context)
                 else:
                     context.update({"plain_certs": plain_certs})
-                    return render(request, 'ovpn/ovpn_plain_certs.html', context)
+                    return render(request, 'ovpn/server_config.html', context)
             else:
                 messages.error(request, "The OpenVPN certifications file dir does not exist!")
-                return render(request, 'ovpn/ovpn_plain_certs.html', context)
+                return render(request, 'ovpn/server_config.html', context)
         else:
             messages.error(request, "This APP should run on linux debian platform!")
             return render(request, 'ovpn/server_config.html')
